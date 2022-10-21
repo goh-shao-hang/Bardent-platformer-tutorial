@@ -22,7 +22,7 @@ public class ChargeState : EnemyState
         base.Enter();
 
         isChargeTimeOver = false;
-        enemy.SetVelocity(stateData.chargeSpeed);
+        enemy.SetVelocityX(stateData.chargeSpeed * entity.FacingDirection);
     }
 
     public override void Exit()

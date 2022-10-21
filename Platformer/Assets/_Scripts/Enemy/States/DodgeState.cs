@@ -30,7 +30,7 @@ public class DodgeState : EnemyState
         base.Enter();
 
         isDodgeOver = false;
-        enemy.SetVelocity(stateData.dodgeSpeed, stateData.dodgeAngle, -enemy.facingDirection); 
+        enemy.SetVelocity(stateData.dodgeSpeed, stateData.dodgeAngle, -enemy.FacingDirection); 
     }
 
     public override void Exit()

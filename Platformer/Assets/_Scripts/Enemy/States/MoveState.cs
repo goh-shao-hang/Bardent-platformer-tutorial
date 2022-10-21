@@ -18,8 +18,8 @@ public class MoveState : EnemyState
     public override void Enter()
     {
         base.Enter();
-        
-        enemy.SetVelocity(stateData.movementSpeed);
+
+        enemy.SetVelocityX(stateData.movementSpeed * entity.FacingDirection);
     }
 
     public override void Exit()

@@ -15,13 +15,13 @@ public class Enemy : Entity
     [SerializeField] private Transform ledgeCheck;
     [SerializeField] private Transform playerCheck;
     [SerializeField] private Transform groundCheck;
-    public int facingDirection { get; private set; }
+    
     public int lastDamageDirection { get; private set; }
 
     private float currentHealth;
     private float currentStunResistance;
     private float lastDamageTime;
-    private Vector2 velocityWorkspace; //used to set values without creating new vector2
+    
 
     protected bool isStunned;
     protected bool isDead;
@@ -42,7 +42,7 @@ public class Enemy : Entity
 
         currentHealth = enemyData.maxHealth;
         currentStunResistance = enemyData.stunResistance;
-        facingDirection = 1;
+        FacingDirection = 1;
     }
 
     protected override void Update()
@@ -55,19 +55,6 @@ public class Enemy : Entity
 
             anim.SetFloat("yVelocity", rb.velocity.y);
         }
-    }
-
-    public virtual void SetVelocity(float velocity)
-    {
-        velocityWorkspace.Set(facingDirection * velocity, rb.velocity.y);
-        rb.velocity = velocityWorkspace;
-    }
-
-    public virtual void SetVelocity(float velocity, Vector2 angle, int direction) //alternate set velocity function
-    {
-        angle.Normalize();
-        velocityWorkspace.Set(angle.x * velocity * direction, angle.y * velocity); //Direction multiplied only on x axis to flip knockback horizontally only
-        rb.velocity = velocityWorkspace;
     }
 
     public virtual bool CheckWall()
@@ -130,23 +117,23 @@ public class Enemy : Entity
         currentStunResistance = enemyData.stunResistance;
     }
 
-    public virtual void DamageHop(float velocity)
+    public virtual void DamageHop(float yVelocity)
     {
-        velocityWorkspace.Set(rb.velocity.x, velocity);
-        rb.velocity = velocityWorkspace;
+        rb.velocity = new Vector2(rb.velocity.x, yVelocity);
     }
-    public virtual void Flip()
+
+    public override void Flip()
     {
-        facingDirection *= -1;
+        base.Flip();
         baseGO.transform.Rotate(0f, 180f, 0f);
     }
 
     public virtual void OnDrawGizmos()
     {
-        Gizmos.DrawLine(wallCheck.position, wallCheck.position + (Vector3)(Vector2.right * facingDirection * enemyData.wallCheckDistance));
+        Gizmos.DrawLine(wallCheck.position, wallCheck.position + (Vector3)(Vector2.right * FacingDirection * enemyData.wallCheckDistance));
         Gizmos.DrawLine(ledgeCheck.position, ledgeCheck.position + (Vector3)(Vector2.down * enemyData.ledgeCheckDistance));
-        Gizmos.DrawWireSphere(playerCheck.position + (Vector3)(Vector2.right * facingDirection * enemyData.closeRangeActionDistance), 0.2f);
-        Gizmos.DrawWireSphere(playerCheck.position + (Vector3)(Vector2.right * facingDirection * enemyData.minAggroDistance), 0.2f);
-        Gizmos.DrawWireSphere(playerCheck.position + (Vector3)(Vector2.right * facingDirection * enemyData.maxAggroDistance), 0.2f);
+        Gizmos.DrawWireSphere(playerCheck.position + (Vector3)(Vector2.right * FacingDirection * enemyData.closeRangeActionDistance), 0.2f);
+        Gizmos.DrawWireSphere(playerCheck.position + (Vector3)(Vector2.right * FacingDirection * enemyData.minAggroDistance), 0.2f);
+        Gizmos.DrawWireSphere(playerCheck.position + (Vector3)(Vector2.right * FacingDirection * enemyData.maxAggroDistance), 0.2f);
     }
 }

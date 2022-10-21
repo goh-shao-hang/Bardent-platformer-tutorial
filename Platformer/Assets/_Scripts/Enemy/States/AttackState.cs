@@ -28,7 +28,7 @@ public class AttackState : EnemyState
         enemy.atsm.attackState = this;
         isAnimationFinished = false;
 
-        enemy.SetVelocity(0f);
+        enemy.SetVelocityX(0f);
     }
 
     public override void Exit()

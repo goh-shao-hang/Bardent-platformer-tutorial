@@ -22,7 +22,7 @@ public class PlayerDetectedState : EnemyState
         base.Enter();
 
         performLongRangeAction = false;
-        enemy.SetVelocity(0f);
+        enemy.SetVelocityX(0f);
     }
 
     public override void Exit()

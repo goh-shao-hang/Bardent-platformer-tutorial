@@ -7,9 +7,10 @@ public class State
     protected FiniteStateMachine stateMachine;
     protected Entity entity;
 
-    public float startTime { get; protected set; }
-    private string animBoolName;
+    protected string animBoolName;
 
+    public float startTime { get; protected set; }
+    
     public State(Entity entity, FiniteStateMachine stateMachine, string animBoolName) //constructor
     {
         this.entity = entity; //this. since both the variable and the parameter have the same name

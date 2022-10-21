@@ -52,7 +52,7 @@ public class StunState : EnemyState
         if (isGrounded && Time.time >= startTime + stateData.stunKnockbackTime && !isMovementStopped) //Make sure the velocity can only be set to 0 if the enemy hits the ground after being knocked back after a certain amount of time
         {
             isMovementStopped = true; //only get into this if statement once, so that the enemy is not continuously stopped and we can make a bounce effect or other stuff otherwards
-            enemy.SetVelocity(0f);
+            enemy.SetVelocityX(0f);
         }
     }
             
