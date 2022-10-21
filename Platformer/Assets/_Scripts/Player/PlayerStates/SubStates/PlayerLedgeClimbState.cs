@@ -65,14 +65,19 @@ public class PlayerLedgeClimbState : PlayerState
             player.SetVelocityZero();
             player.transform.position = startPos;
 
-            if ((xInput == player.FacingDirection || yInput == 1 || jumpInput) && isHanging && !isClimbing) //Start climbing if player inputs towards the ledge
+            if ((xInput == player.FacingDirection || yInput == 1) && isHanging && !isClimbing) //Start climbing if player inputs towards the ledge
             {
                 isClimbing = true;
                 player.anim.SetBool("climbLedge", true);
             }
-            else if (yInput == -1 && isHanging && !isClimbing) //Drop from ledge if player inputs down
+            else if ((yInput == -1 || xInput == -player.FacingDirection) && isHanging && !isClimbing) //Drop from ledge if player inputs down
             {
                 stateMachine.ChangeState(player.InAirState);
+            }
+            else if (jumpInput && !isClimbing)
+            {
+                player.WallJumpState.DetermineWallJumpDirection(true);
+                stateMachine.ChangeState(player.WallJumpState);
             }
         }
     }

@@ -70,6 +70,12 @@ public class Entity : MonoBehaviour
         CurrentVelocity = vector2Workspace;
     }
 
+    public virtual void SetVelocity(float velocity, Vector2 direction) //Alternate set velocity that simply set velocity towards a direction
+    {
+        rb.velocity = direction * velocity;
+        CurrentVelocity = rb.velocity;
+    }
+
     public virtual void Flip()
     {
         FacingDirection *= -1;

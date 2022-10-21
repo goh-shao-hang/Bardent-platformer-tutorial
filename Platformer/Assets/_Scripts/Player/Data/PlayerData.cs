@@ -31,6 +31,16 @@ public class PlayerData : ScriptableObject
     public Vector2 startOffset;
     public Vector2 endOffset;
 
+    [Header("Dash State")]
+    public float dashCooldown = 0.5f;
+    public float maxHoldTime = 1f;
+    public float holdTimeScale = 0.25f; //Timescale to set to enter slow motion 
+    public float dashTime = 0.2f;
+    public float dashSpeed = 30f;
+    public float drag = 10f; //Air drag
+    public float dashEndYMultipler = 0.2f; //Limit y velocity when dash ends
+    public float distanceBetweenAfterImages = 0.5f;
+
     [Header("Check Variables and LayerMasks")]
     public float groundCheckRadius = 0.3f;
     public float wallCheckDistance = 0.5f;

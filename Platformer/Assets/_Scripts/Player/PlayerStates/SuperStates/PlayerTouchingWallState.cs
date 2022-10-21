@@ -36,6 +36,7 @@ public class PlayerTouchingWallState : PlayerState
 
         if (isTouchingWall && !isTouchingLedge)
         {
+            player.SetVelocityZero();
             player.LedgeClimbState.SetDetectedPosition(player.transform.position);
         }
     }

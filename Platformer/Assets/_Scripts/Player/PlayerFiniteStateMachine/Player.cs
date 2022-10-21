@@ -12,8 +12,10 @@ public class Player : Entity
     [SerializeField] private Transform groundCheck;
     [SerializeField] private Transform wallCheck;
     [SerializeField] private Transform ledgeCheck;
+    [SerializeField] private Transform dashDirectionIndicator;
 
     public PlayerInputHandler InputHandler { get; private set; }
+    public Transform DashDirectionIndicator => dashDirectionIndicator;
     #endregion
 
     #region States
@@ -27,6 +29,7 @@ public class Player : Entity
     public PlayerWallClimbState WallClimbState { get; private set; }
     public PlayerWallJumpState WallJumpState { get; private set; }
     public PlayerLedgeClimbState LedgeClimbState { get; private set; }
+    public PlayerDashState DashState { get; private set; }
     #endregion
 
     #region Unity Callback Functions
@@ -44,6 +47,7 @@ public class Player : Entity
         WallClimbState = new PlayerWallClimbState(this, StateMachine, "wallClimb", playerData);
         WallJumpState = new PlayerWallJumpState(this, StateMachine, "inAir", playerData);
         LedgeClimbState = new PlayerLedgeClimbState(this, StateMachine, "ledgeClimbState", playerData);
+        DashState = new PlayerDashState(this, StateMachine, "inAir", playerData);
     }
 
     protected override void Start()
@@ -85,7 +89,7 @@ public class Player : Entity
         float xDist = xHit.distance; //Distance of the raycast hit position from the raycast origin used to determine the position of the ledge corner
 
         vector2Workspace.Set(xDist * FacingDirection, 0f);
-        RaycastHit2D yHit = Physics2D.Raycast(ledgeCheck.position + (Vector3)(vector2Workspace), Vector2.down, ledgeCheck.position.y - wallCheck.position.y, playerData.whatIsGround);
+        RaycastHit2D yHit = Physics2D.Raycast(ledgeCheck.position + (Vector3)(vector2Workspace), Vector2.down, ledgeCheck.position.y - wallCheck.position.y + 0.1f, playerData.whatIsGround);
         //By offsetting our y raycast with the x distance, we ensure that we can fire a vertical raycast to hit the ledge corner and determine the y position of the ledge
         float yDist = yHit.distance;
 

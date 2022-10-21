@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class PlayerInAirState : PlayerState //Not a superstate but is not part of any superstate
 {
+    //Input
     private int xInput;
     private bool jumpInput;
     private bool jumpInputStop;
     private bool grabInput;
+    private bool dashInput;
+
+    //Checks
     private bool isGrounded;
     private bool isTouchingWall;
     private bool isTouchingWallBack;
@@ -17,7 +21,6 @@ public class PlayerInAirState : PlayerState //Not a superstate but is not part o
     private bool isTouchingWallPreviousFrame; //These previous frame checks are used to determine if we should start the wall jump coyote time
     private bool isTouchingWallBackPreviousFrame;
     private float wallJumpCoyoteTimeStart;
-
     private bool isJumping;
 
     public PlayerInAirState(Entity entity, FiniteStateMachine stateMachine, string animBoolName, PlayerData playerData) : base(entity, stateMachine, animBoolName, playerData)
@@ -73,6 +76,7 @@ public class PlayerInAirState : PlayerState //Not a superstate but is not part o
         jumpInput = player.InputHandler.JumpInput;
         jumpInputStop = player.InputHandler.JumpInputStop;
         grabInput = player.InputHandler.GrabInput;
+        dashInput = player.InputHandler.DashInput;
 
         CheckJumpMultiplier();
 
@@ -80,7 +84,7 @@ public class PlayerInAirState : PlayerState //Not a superstate but is not part o
         {
             stateMachine.ChangeState(player.LandState);
         }
-        else if (isTouchingWall && !isTouchingLedge)
+        else if (isTouchingWall && !isTouchingLedge && !isGrounded) //Ledge climb
         {
             stateMachine.ChangeState(player.LedgeClimbState);
         }
@@ -95,13 +99,17 @@ public class PlayerInAirState : PlayerState //Not a superstate but is not part o
         {
             stateMachine.ChangeState(player.JumpState);
         }
-        else if (isTouchingWall && grabInput)
+        else if (isTouchingWall && grabInput && isTouchingLedge)
         {
             stateMachine.ChangeState(player.WallGrabState);
         }
         else if (isTouchingWall && xInput == player.FacingDirection && player.CurrentVelocity.y <= 0) //If player input towards wall, wall slide (also make sure player is falling before entering wall slide)
         {
             stateMachine.ChangeState(player.WallSlideState);
+        }
+        else if (dashInput && player.DashState.CheckIfCanDash)
+        {
+            stateMachine.ChangeState(player.DashState);
         }
         else
         {
