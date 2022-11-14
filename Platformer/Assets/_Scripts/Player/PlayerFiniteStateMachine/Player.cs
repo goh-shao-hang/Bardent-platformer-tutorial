@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : Entity
 {
     #region Assignables
+
     [Header("Base Data")]
     [SerializeField] private PlayerData playerData;
 
@@ -12,10 +13,14 @@ public class Player : Entity
     [SerializeField] private Transform groundCheck;
     [SerializeField] private Transform wallCheck;
     [SerializeField] private Transform ledgeCheck;
+    [SerializeField] private Transform ceilingCheck;
     [SerializeField] private Transform dashDirectionIndicator;
 
     public PlayerInputHandler InputHandler { get; private set; }
+    public BoxCollider2D MovementCollider { get; private set; }
     public Transform DashDirectionIndicator => dashDirectionIndicator;
+    public PlayerInventory Inventory { get; private set; }
+
     #endregion
 
     #region States
@@ -30,6 +35,11 @@ public class Player : Entity
     public PlayerWallJumpState WallJumpState { get; private set; }
     public PlayerLedgeClimbState LedgeClimbState { get; private set; }
     public PlayerDashState DashState { get; private set; }
+    public PlayerCrouchIdleState CrouchIdleState { get; private set; }
+    public PlayerCrouchMoveState CrouchMoveState { get; private set; }
+    public PlayerAttackState PrimaryAttackState { get; private set; }
+    public PlayerAttackState SecondaryAttackState { get; private set; }
+
     #endregion
 
     #region Unity Callback Functions
@@ -48,6 +58,10 @@ public class Player : Entity
         WallJumpState = new PlayerWallJumpState(this, StateMachine, "inAir", playerData);
         LedgeClimbState = new PlayerLedgeClimbState(this, StateMachine, "ledgeClimbState", playerData);
         DashState = new PlayerDashState(this, StateMachine, "inAir", playerData);
+        CrouchIdleState = new PlayerCrouchIdleState(this, StateMachine, "crouchIdle", playerData);
+        CrouchMoveState = new PlayerCrouchMoveState(this, StateMachine, "crouchMove", playerData);
+        PrimaryAttackState = new PlayerAttackState(this, StateMachine, "attack", playerData);
+        SecondaryAttackState = new PlayerAttackState(this, StateMachine, "attack", playerData);
     }
 
     protected override void Start()
@@ -57,6 +71,11 @@ public class Player : Entity
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         InputHandler = GetComponent<PlayerInputHandler>();
+        MovementCollider = GetComponent<BoxCollider2D>();
+        Inventory = GetComponent<PlayerInventory>();
+
+        PrimaryAttackState.SetWeapon(Inventory.weapons[((int)CombatInputs.Primary)]);
+        //SecondaryAttackState.SetWeapon(Inventory.weapons[((int)CombatInputs.Secondary)]);
 
         StateMachine.Inititalize(IdleState);
     }
@@ -77,19 +96,33 @@ public class Player : Entity
     public bool CheckIfTouchingWall() => Physics2D.Raycast(wallCheck.position, Vector2.right * FacingDirection, playerData.wallCheckDistance, playerData.whatIsGround);
 
     public bool CheckIfTouchingWallBack() => Physics2D.Raycast(wallCheck.position, Vector2.right * -FacingDirection, playerData.wallCheckDistance, playerData.whatIsGround); //Touching a wall from behind
+
     public bool CheckForLedge() => Physics2D.Raycast(ledgeCheck.position, Vector2.right * FacingDirection, playerData.wallCheckDistance, playerData.whatIsGround);
+
+    public bool CheckForCeiling() => Physics2D.OverlapCircle(ceilingCheck.position, playerData.groundCheckRadius, playerData.whatIsGround);
 
     #endregion
 
     #region Other Functions
+
+    public void SetColliderHeight(float height)
+    {
+        Vector2 center = MovementCollider.offset;
+        vector2Workspace.Set(MovementCollider.size.x, height);
+
+        center.y += (height - MovementCollider.size.y) / 2; //Shift the offset so that the bottom of the collider remains on the ground. Every 1 unit the collider is shrinked, the offset needs to be lowered by 0.5 unit. The minus sign handles if the collider should be shrinked or growed.
+
+        MovementCollider.size = vector2Workspace;
+        MovementCollider.offset = center;
+    }
 
     public Vector2 DetermineLedgeCornerPosition()
     {
         RaycastHit2D xHit = Physics2D.Raycast(wallCheck.position, Vector2.right * FacingDirection, playerData.wallCheckDistance, playerData.whatIsGround);
         float xDist = xHit.distance; //Distance of the raycast hit position from the raycast origin used to determine the position of the ledge corner
 
-        vector2Workspace.Set(xDist * FacingDirection, 0f);
-        RaycastHit2D yHit = Physics2D.Raycast(ledgeCheck.position + (Vector3)(vector2Workspace), Vector2.down, ledgeCheck.position.y - wallCheck.position.y + 0.1f, playerData.whatIsGround);
+        vector2Workspace.Set((xDist + 0.015f) * FacingDirection, 0f);
+        RaycastHit2D yHit = Physics2D.Raycast(ledgeCheck.position + (Vector3)(vector2Workspace), Vector2.down, ledgeCheck.position.y - wallCheck.position.y + 0.015f, playerData.whatIsGround);
         //By offsetting our y raycast with the x distance, we ensure that we can fire a vertical raycast to hit the ledge corner and determine the y position of the ledge
         float yDist = yHit.distance;
 

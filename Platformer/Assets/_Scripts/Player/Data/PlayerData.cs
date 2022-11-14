@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerData : ScriptableObject
 {
     [Header("Move State")]
-    public float movementVelocity = 10f;
+    public float moveSpeed = 10f;
 
     [Header("Jump State")]
     public float jumpVelocity = 15f;
@@ -40,6 +40,11 @@ public class PlayerData : ScriptableObject
     public float drag = 10f; //Air drag
     public float dashEndYMultipler = 0.2f; //Limit y velocity when dash ends
     public float distanceBetweenAfterImages = 0.5f;
+
+    [Header("Crouch States")]
+    public float crouchMoveSpeed = 5f;
+    public float crouchColliderHeight = 0.8f;
+    public float standColliderHeight = 1.6f;
 
     [Header("Check Variables and LayerMasks")]
     public float groundCheckRadius = 0.3f;

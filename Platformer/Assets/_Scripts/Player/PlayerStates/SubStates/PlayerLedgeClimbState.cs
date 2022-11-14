@@ -11,6 +11,7 @@ public class PlayerLedgeClimbState : PlayerState
 
     private bool isHanging;
     private bool isClimbing;
+    private bool isTouchingCeiling; //Cast a ray from the ledge corner (not the player) to see if we need to stand or crouch after climbing a ledge. Different from the ceiling check function in the player
 
     private int xInput;
     private int yInput;
@@ -54,7 +55,14 @@ public class PlayerLedgeClimbState : PlayerState
 
         if (isAnimationFinished)
         {
-            stateMachine.ChangeState(player.IdleState);
+            if (isTouchingCeiling)
+            {
+                stateMachine.ChangeState(player.CrouchIdleState); //Automatically crouches after a ledge climb if there is not enough space to stand
+            }
+            else
+            {
+                stateMachine.ChangeState(player.IdleState);
+            }
         }
         else
         {
@@ -67,6 +75,7 @@ public class PlayerLedgeClimbState : PlayerState
 
             if ((xInput == player.FacingDirection || yInput == 1) && isHanging && !isClimbing) //Start climbing if player inputs towards the ledge
             {
+                CheckForCeilingAboveLedge();
                 isClimbing = true;
                 player.anim.SetBool("climbLedge", true);
             }
@@ -96,8 +105,13 @@ public class PlayerLedgeClimbState : PlayerState
         player.anim.SetBool("climbLedge", false);
     }
 
-    
-
     public void SetDetectedPosition(Vector2 pos) => detectedPos = pos;
 
+                                                                                                    
+    private void CheckForCeilingAboveLedge()
+    {
+                                                            //Offset upwards        Offset into ledge
+        isTouchingCeiling = Physics2D.Raycast(cornerPos + (Vector2.up * 0.015f) + (Vector2.right * 0.015f * player.FacingDirection), Vector2.up, playerData.standColliderHeight, playerData.whatIsGround);
+        player.anim.SetBool("isTouchingCeiling", isTouchingCeiling);
+    }
 }

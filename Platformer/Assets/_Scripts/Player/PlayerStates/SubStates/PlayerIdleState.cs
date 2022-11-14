@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerIdleState : PlayerGroundedState
 {
+    
+
     public PlayerIdleState(Entity entity, FiniteStateMachine stateMachine, string animBoolName, PlayerData playerData) : base(entity, stateMachine, animBoolName, playerData)
     {
     }
@@ -29,9 +31,15 @@ public class PlayerIdleState : PlayerGroundedState
     {
         base.LogicUpdate();
 
-        if (xInput != 0 && !isExitingState)
+        if (isExitingState) return;
+        
+        if (xInput != 0)
         {
             stateMachine.ChangeState(player.MoveState);
+        }
+        else if (yInput == -1)
+        {
+            stateMachine.ChangeState(player.CrouchIdleState);
         }
     }
 

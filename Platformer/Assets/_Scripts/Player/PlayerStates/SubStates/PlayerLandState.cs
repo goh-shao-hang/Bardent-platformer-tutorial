@@ -18,6 +18,10 @@ public class PlayerLandState : PlayerGroundedState
         {
             stateMachine.ChangeState(player.MoveState);
         }
+        else if (yInput == -1)
+        {
+            stateMachine.ChangeState(player.CrouchIdleState);
+        }
         else if (isAnimationFinished)
         {
             stateMachine.ChangeState(player.IdleState);

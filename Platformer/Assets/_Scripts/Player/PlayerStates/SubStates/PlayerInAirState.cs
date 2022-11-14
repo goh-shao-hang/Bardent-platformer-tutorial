@@ -80,7 +80,15 @@ public class PlayerInAirState : PlayerState //Not a superstate but is not part o
 
         CheckJumpMultiplier();
 
-        if (isGrounded && player.CurrentVelocity.y < 0.01f)
+        if (player.InputHandler.AttackInputs[((int)CombatInputs.Primary)])
+        {
+            stateMachine.ChangeState(player.PrimaryAttackState);
+        }
+        else if (player.InputHandler.AttackInputs[(int)CombatInputs.Secondary])
+        {
+            stateMachine.ChangeState(player.SecondaryAttackState);
+        }
+        else if (isGrounded && player.CurrentVelocity.y < 0.01f)
         {
             stateMachine.ChangeState(player.LandState);
         }
@@ -114,7 +122,7 @@ public class PlayerInAirState : PlayerState //Not a superstate but is not part o
         else
         {
             player.CheckIfShouldFlip(xInput);
-            player.SetVelocityX(playerData.movementVelocity * xInput);
+            player.SetVelocityX(playerData.moveSpeed * xInput);
             player.anim.SetFloat("yVelocity", player.CurrentVelocity.y);
             player.anim.SetFloat("xVelocity", Mathf.Abs(player.CurrentVelocity.x));
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     public bool JumpInput { get; private set; }
     public bool JumpInputStop { get; private set; }
+    public bool[] AttackInputs { get; private set; }
 
     [SerializeField] private float jumpInputBuffer = 0.2f;
     private float jumpInputStartTime;
@@ -54,6 +56,10 @@ public class PlayerInputHandler : MonoBehaviour
     private void Start()
     {
         playerInput = GetComponent<PlayerInput>();
+
+        int count = Enum.GetValues(typeof(CombatInputs)).Length; //Get the array of values in an enum
+        AttackInputs = new bool[count];
+        
         cam = Camera.main;
     }
 
@@ -61,6 +67,32 @@ public class PlayerInputHandler : MonoBehaviour
     {
         CheckJumpInputBuffer();
         CheckDashInputBuffer();
+    }
+
+    public void OnPrimaryAttackInput(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            AttackInputs[((int)CombatInputs.Primary)] = true;
+        }
+
+        if (context.canceled)
+        {
+            AttackInputs[((int)CombatInputs.Primary)] = false;
+        }
+    }
+
+    public void OnSecondaryAttackInput(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            AttackInputs[((int)CombatInputs.Secondary)] = true;
+        }
+
+        if (context.canceled)
+        {
+            AttackInputs[((int)CombatInputs.Secondary)] = false;
+        }
     }
 
     public void OnMoveInput(InputAction.CallbackContext context)
@@ -155,4 +187,10 @@ public class PlayerInputHandler : MonoBehaviour
         }
     }
 
+}
+
+public enum CombatInputs
+{
+    Primary,
+    Secondary
 }
