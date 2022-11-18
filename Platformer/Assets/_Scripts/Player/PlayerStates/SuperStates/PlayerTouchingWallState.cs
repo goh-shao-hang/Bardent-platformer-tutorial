@@ -30,13 +30,13 @@ public class PlayerTouchingWallState : PlayerState
     {
         base.DoChecks();
 
-        isGrounded = player.CheckIfGrounded();
-        isTouchingWall = player.CheckIfTouchingWall();
-        isTouchingLedge = player.CheckForLedge();
+        isGrounded = core.CollisionSenses.Ground;
+        isTouchingWall = core.CollisionSenses.WallFront;
+        isTouchingLedge = core.CollisionSenses.LedgeHorizontal;
 
         if (isTouchingWall && !isTouchingLedge)
         {
-            player.SetVelocityZero();
+            core.Movement.SetVelocityZero();
             player.LedgeClimbState.SetDetectedPosition(player.transform.position);
         }
     }
@@ -69,7 +69,7 @@ public class PlayerTouchingWallState : PlayerState
         {
             stateMachine.ChangeState(player.IdleState);
         }
-        else if (!isTouchingWall || (xInput != player.FacingDirection && !grabInput)) //player is in air when not touching wall, or is touching wall but not trying to grab it
+        else if (!isTouchingWall || (xInput != core.Movement.FacingDirection && !grabInput)) //player is in air when not touching wall, or is touching wall but not trying to grab it
         {
             stateMachine.ChangeState(player.InAirState);
         }

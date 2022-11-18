@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class State
 {
+    protected Core core;
     protected FiniteStateMachine stateMachine;
     protected Entity entity;
 
@@ -16,6 +17,7 @@ public class State
         this.entity = entity; //this. since both the variable and the parameter have the same name
         this.stateMachine = stateMachine;
         this.animBoolName = animBoolName;
+        core = entity.Core;
     }
 
     public virtual void Enter()

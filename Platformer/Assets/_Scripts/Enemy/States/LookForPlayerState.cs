@@ -34,7 +34,7 @@ public class LookForPlayerState : EnemyState
         lastTurnTime = startTime;
         amountOfTurnsDone = 0;
 
-        enemy.SetVelocityX(0f);
+        core.Movement.SetVelocityX(0f);
     }
 
     public override void Exit()
@@ -80,7 +80,7 @@ public class LookForPlayerState : EnemyState
 
     private void nextTurn()
     {
-        enemy.Flip();
+        core.Movement.Flip();
         lastTurnTime = Time.time;
         amountOfTurnsDone++;
     }

@@ -19,7 +19,7 @@ public class PlayerState : State
     public override void Enter()
     {
         base.Enter();
-        Debug.Log(animBoolName);
+        //Debug.Log(animBoolName);
         isAnimationFinished = false;
         isExitingState = false;
     }

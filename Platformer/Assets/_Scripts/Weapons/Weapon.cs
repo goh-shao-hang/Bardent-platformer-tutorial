@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    [SerializeField] private SO_WeaponData weaponData;
+    [SerializeField] protected SO_WeaponData weaponData;
 
     protected PlayerAttackState state;
     protected Animator baseAnimator;
@@ -15,7 +15,7 @@ public class Weapon : MonoBehaviour
 
     protected int attackCounter;
 
-    protected virtual void Start()
+    protected virtual void Awake()
     {
         Animator[] animators = GetComponentsInChildren<Animator>();
         baseAnimator = animators[0];
@@ -40,7 +40,7 @@ public class Weapon : MonoBehaviour
         baseAnimator.SetBool(attackHash, false);
         weaponAnimator.SetBool(attackHash, false);
 
-        attackCounter = (attackCounter + 1) % weaponData.movementSpeed.Length;
+        attackCounter = (attackCounter + 1) % weaponData.amountOfAttacks;
 
         gameObject.SetActive(true);
     }
@@ -75,6 +75,11 @@ public class Weapon : MonoBehaviour
     public virtual void AnimationFinishTrigger()
     {
         state.AnimationFinishTrigger();
+    }
+
+    public virtual void AnimationActionTrigger()
+    {
+
     }
 
     #endregion

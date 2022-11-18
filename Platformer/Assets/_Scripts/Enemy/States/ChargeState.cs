@@ -22,7 +22,7 @@ public class ChargeState : EnemyState
         base.Enter();
 
         isChargeTimeOver = false;
-        enemy.SetVelocityX(stateData.chargeSpeed * entity.FacingDirection);
+        core.Movement.SetVelocityX(stateData.chargeSpeed * core.Movement.FacingDirection);
     }
 
     public override void Exit()
@@ -50,8 +50,8 @@ public class ChargeState : EnemyState
         base.DoChecks();
 
         isPlayerInMinAggroRange = enemy.CheckPlayerInMinAggroRange();
-        isDetectingLedge = enemy.CheckLedge();
-        isDetectingWall = enemy.CheckWall();
+        isDetectingLedge = core.CollisionSenses.LedgeVertical;
+        isDetectingWall = core.CollisionSenses.WallFront;
         performCloseRangeAction = enemy.CheckPlayerInCloseRangeAction();
     }
 }

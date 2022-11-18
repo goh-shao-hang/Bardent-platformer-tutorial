@@ -22,7 +22,7 @@ public class DodgeState : EnemyState
 
         performCloseRangeAction = enemy.CheckPlayerInCloseRangeAction();
         isPlayerInMaxAggroRange = enemy.CheckPlayerInMaxAggroRange();
-        isGrounded = enemy.CheckGround();
+        isGrounded = core.CollisionSenses.Ground;
     }
 
     public override void Enter()
@@ -30,7 +30,7 @@ public class DodgeState : EnemyState
         base.Enter();
 
         isDodgeOver = false;
-        enemy.SetVelocity(stateData.dodgeSpeed, stateData.dodgeAngle, -enemy.FacingDirection); 
+        core.Movement.SetVelocity(stateData.dodgeSpeed, stateData.dodgeAngle, -core.Movement.FacingDirection); 
     }
 
     public override void Exit()

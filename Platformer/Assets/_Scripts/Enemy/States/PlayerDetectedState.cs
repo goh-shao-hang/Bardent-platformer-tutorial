@@ -22,7 +22,7 @@ public class PlayerDetectedState : EnemyState
         base.Enter();
 
         performLongRangeAction = false;
-        enemy.SetVelocityX(0f);
+        core.Movement.SetVelocityX(0f);
     }
 
     public override void Exit()
@@ -51,7 +51,7 @@ public class PlayerDetectedState : EnemyState
 
         isPlayerInMinAggroRange = enemy.CheckPlayerInMinAggroRange();
         isPlayerInMaxAggroRange = enemy.CheckPlayerInMaxAggroRange();
-        isDetectingLedge = enemy.CheckLedge();
+        isDetectingLedge = core.CollisionSenses.LedgeVertical;
         performCloseRangeAction = enemy.CheckPlayerInCloseRangeAction();
     }
 }

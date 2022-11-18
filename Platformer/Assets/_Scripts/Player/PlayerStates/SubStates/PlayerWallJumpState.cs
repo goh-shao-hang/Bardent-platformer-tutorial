@@ -16,8 +16,8 @@ public class PlayerWallJumpState : PlayerAbilityState
 
         player.InputHandler.UseJumpInput();
         player.JumpState.ResetAmountOfJumpsLeft();
-        player.SetVelocity(playerData.wallJumpVelocity, playerData.wallJumpAngle, wallJumpDirection);
-        player.CheckIfShouldFlip(wallJumpDirection); //Flip the player if needed. We only need to do this one throughout one wall jump
+        core.Movement.SetVelocity(playerData.wallJumpVelocity, playerData.wallJumpAngle, wallJumpDirection);
+        core.Movement.CheckIfShouldFlip(wallJumpDirection); //Flip the player if needed. We only need to do this one throughout one wall jump
         player.JumpState.DecreaseAmountOfJumpsLeft(); //Up to personal preference if wall jump should consume one jump. In this case yes.
     }
 
@@ -25,8 +25,8 @@ public class PlayerWallJumpState : PlayerAbilityState
     {
         base.LogicUpdate();
 
-        player.anim.SetFloat("xVelocity", Mathf.Abs(player.CurrentVelocity.x));
-        player.anim.SetFloat("yVelocity", player.CurrentVelocity.y);
+        player.anim.SetFloat("xVelocity", Mathf.Abs(core.Movement.CurrentVelocity.x));
+        player.anim.SetFloat("yVelocity", core.Movement.CurrentVelocity.y);
 
         if (Time.time >= startTime + playerData.wallJumpTime)
         {
@@ -34,5 +34,5 @@ public class PlayerWallJumpState : PlayerAbilityState
         }
     }
 
-    public void DetermineWallJumpDirection(bool isTouchingWall) => wallJumpDirection = isTouchingWall ? -player.FacingDirection : player.FacingDirection; //If is facing wall, jump away from it, else jump forward
+    public void DetermineWallJumpDirection(bool isTouchingWall) => wallJumpDirection = isTouchingWall ? -core.Movement.FacingDirection : core.Movement.FacingDirection; //If is facing wall, jump away from it, else jump forward
 }

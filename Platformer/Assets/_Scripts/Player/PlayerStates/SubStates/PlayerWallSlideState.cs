@@ -14,7 +14,7 @@ public class PlayerWallSlideState : PlayerTouchingWallState
 
         if (isExitingState) return; //We don't want to set velocity or change state again if we triggered a wall jump in the superstate
 
-        player.SetVelocityY(-playerData.wallSlideVelocity);
+        core.Movement.SetVelocityY(-playerData.wallSlideVelocity);
         
         if (grabInput && yInput == 0)
         {

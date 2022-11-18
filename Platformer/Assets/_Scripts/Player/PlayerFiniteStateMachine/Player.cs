@@ -10,10 +10,6 @@ public class Player : Entity
     [SerializeField] private PlayerData playerData;
 
     [Header("Assignables")]
-    [SerializeField] private Transform groundCheck;
-    [SerializeField] private Transform wallCheck;
-    [SerializeField] private Transform ledgeCheck;
-    [SerializeField] private Transform ceilingCheck;
     [SerializeField] private Transform dashDirectionIndicator;
 
     public PlayerInputHandler InputHandler { get; private set; }
@@ -68,8 +64,6 @@ public class Player : Entity
     {
         base.Start();
 
-        anim = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody2D>();
         InputHandler = GetComponent<PlayerInputHandler>();
         MovementCollider = GetComponent<BoxCollider2D>();
         Inventory = GetComponent<PlayerInventory>();
@@ -81,53 +75,17 @@ public class Player : Entity
     }
     #endregion
 
-    #region Check Functions
-
-    public void CheckIfShouldFlip(int xInput)
-    {
-        if (xInput != 0 && xInput != FacingDirection)
-        {
-            Flip();
-        }
-    }
-
-    public bool CheckIfGrounded() => Physics2D.OverlapCircle(groundCheck.position, playerData.groundCheckRadius, playerData.whatIsGround);
-
-    public bool CheckIfTouchingWall() => Physics2D.Raycast(wallCheck.position, Vector2.right * FacingDirection, playerData.wallCheckDistance, playerData.whatIsGround);
-
-    public bool CheckIfTouchingWallBack() => Physics2D.Raycast(wallCheck.position, Vector2.right * -FacingDirection, playerData.wallCheckDistance, playerData.whatIsGround); //Touching a wall from behind
-
-    public bool CheckForLedge() => Physics2D.Raycast(ledgeCheck.position, Vector2.right * FacingDirection, playerData.wallCheckDistance, playerData.whatIsGround);
-
-    public bool CheckForCeiling() => Physics2D.OverlapCircle(ceilingCheck.position, playerData.groundCheckRadius, playerData.whatIsGround);
-
-    #endregion
-
     #region Other Functions
 
     public void SetColliderHeight(float height)
     {
         Vector2 center = MovementCollider.offset;
-        vector2Workspace.Set(MovementCollider.size.x, height);
+        Vector2 newColliderSize = new Vector2(MovementCollider.size.x, height);
 
         center.y += (height - MovementCollider.size.y) / 2; //Shift the offset so that the bottom of the collider remains on the ground. Every 1 unit the collider is shrinked, the offset needs to be lowered by 0.5 unit. The minus sign handles if the collider should be shrinked or growed.
 
-        MovementCollider.size = vector2Workspace;
+        MovementCollider.size = newColliderSize;
         MovementCollider.offset = center;
-    }
-
-    public Vector2 DetermineLedgeCornerPosition()
-    {
-        RaycastHit2D xHit = Physics2D.Raycast(wallCheck.position, Vector2.right * FacingDirection, playerData.wallCheckDistance, playerData.whatIsGround);
-        float xDist = xHit.distance; //Distance of the raycast hit position from the raycast origin used to determine the position of the ledge corner
-
-        vector2Workspace.Set((xDist + 0.015f) * FacingDirection, 0f);
-        RaycastHit2D yHit = Physics2D.Raycast(ledgeCheck.position + (Vector3)(vector2Workspace), Vector2.down, ledgeCheck.position.y - wallCheck.position.y + 0.015f, playerData.whatIsGround);
-        //By offsetting our y raycast with the x distance, we ensure that we can fire a vertical raycast to hit the ledge corner and determine the y position of the ledge
-        float yDist = yHit.distance;
-
-        vector2Workspace.Set(wallCheck.position.x + (xDist * FacingDirection), ledgeCheck.position.y - yDist); //Final determined corner position
-        return vector2Workspace;
     }
 
     private void AnimationTrigger() => ((PlayerState)StateMachine.CurrentState).AnimationTrigger(); //Casting required to call this function since it is exclusive to the child class of State (PlayerState)
@@ -135,10 +93,4 @@ public class Player : Entity
     private void AnimationFinishTrigger() => ((PlayerState)StateMachine.CurrentState).AnimationFinishTrigger();
 
     #endregion
-
-    public override void Flip()
-    {
-        base.Flip();
-        transform.Rotate(0f, 180f, 0f);
-    }
 }
