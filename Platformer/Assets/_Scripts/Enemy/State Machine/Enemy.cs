@@ -48,7 +48,7 @@ public class Enemy : Entity
         {
             ResetStunResistance();
 
-            anim.SetFloat("yVelocity", Core.Movement.rb.velocity.y);
+            anim.SetFloat("yVelocity", Core.Movement.RB.velocity.y);
         }
     }
 
@@ -67,30 +67,6 @@ public class Enemy : Entity
         return Physics2D.Raycast(playerCheck.position, transform.right, enemyData.closeRangeActionDistance, enemyData.whatIsPlayer);
     }
 
-    public virtual void TakeDamage(AttackDetails attackDetails)
-    {
-        lastDamageTime = Time.time;
-        currentHealth -= attackDetails.damageAmount;
-        currentStunResistance -= attackDetails.stunDamageAmount;
-
-        //Effects
-        DamageHop(enemyData.damageHopSpeed);
-        Instantiate(enemyData.hitParticles, transform.position, Quaternion.Euler(0f, 0f, Random.Range(0f, 360f)));
-
-        if (currentHealth <= 0)
-        {
-            isDead = true;
-            return;
-        }
-
-        if (attackDetails.position.x > transform.position.x) //attack came from right, so knockback towards left
-            lastDamageDirection = -1;
-        else
-            lastDamageDirection = 1;
-
-        if (currentStunResistance <= 0)
-            isStunned = true;
-    }
     public virtual void ResetStunResistance()
     {
         isStunned = false;
@@ -99,7 +75,7 @@ public class Enemy : Entity
 
     public virtual void DamageHop(float yVelocity)
     {
-        Core.Movement.rb.velocity = new Vector2(Core.Movement.rb.velocity.x, yVelocity);
+        Core.Movement.RB.velocity = new Vector2(Core.Movement.RB.velocity.x, yVelocity);
     }
 
     public virtual void OnDrawGizmos()

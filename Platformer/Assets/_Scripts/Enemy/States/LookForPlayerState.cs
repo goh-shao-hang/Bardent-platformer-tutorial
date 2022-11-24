@@ -46,6 +46,8 @@ public class LookForPlayerState : EnemyState
     {
         base.LogicUpdate();
 
+        core.Movement.SetVelocityX(0f);
+
         if (turnImmediately)
         {
             nextTurn();

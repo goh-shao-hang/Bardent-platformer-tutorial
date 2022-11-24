@@ -31,9 +31,9 @@ public class Enemy2 : Enemy
     [SerializeField] private Transform meleeAttackPosition;
     [SerializeField] private Transform rangedAttackPosition;
 
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
 
         moveState = new E2_MoveState(this, StateMachine, "move", moveStateData);
         idleState = new E2_IdleState(this, StateMachine, "idle", idleStateData);
@@ -44,32 +44,13 @@ public class Enemy2 : Enemy
         deadState = new E2_DeadState(this, StateMachine, "dead", deadStateData);
         dodgeState = new E2_DodgeState(this, StateMachine, "dodge", dodgeStateData);
         rangedAttackState = new E2_RangedAttackState(this, StateMachine, "rangedAttack", rangedAttackPosition, rangedAttackStateData);
-
-        StateMachine.Inititalize(moveState);
     }
 
-    public override void TakeDamage(AttackDetails attackDetails)
+    protected override void Start()
     {
-        base.TakeDamage(attackDetails);
+        base.Start();
 
-        if (isDead)
-        {
-            StateMachine.ChangeState(deadState);
-        }
-        else if (isStunned && StateMachine.CurrentState != stunState)
-        {
-            StateMachine.ChangeState(stunState);
-        }
-        else if (CheckPlayerInMinAggroRange())
-        {
-            StateMachine.ChangeState(rangedAttackState);
-        }
-        else if (!CheckPlayerInMinAggroRange() && !isStunned) //If player hits from behind, go to look for player state
-        {
-                idleState.SetFlipAfterIdle(false); //if this is left true, the enemy will flip twice as a result
-                lookForPlayerState.SetTurnImmediately(true);
-                StateMachine.ChangeState(lookForPlayerState);
-        }
+        StateMachine.Inititalize(moveState);
     }
 
     public override void OnDrawGizmos()

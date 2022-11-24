@@ -74,7 +74,7 @@ public class PlayerDashState : PlayerAbilityState
                 Time.timeScale = 1f;
                 startTime = Time.time; //Reset start time to unscaled time to track how long have we dashed for
                 core.Movement.CheckIfShouldFlip(Mathf.RoundToInt(dashDirection.x)); //Flip if dashing backwards
-                player.Core.Movement.rb.drag = playerData.drag;
+                player.Core.Movement.RB.drag = playerData.drag;
                 core.Movement.SetVelocity(playerData.dashSpeed, dashDirection);
                 player.DashDirectionIndicator.gameObject.SetActive(false);
                 PlaceAfterImage();
@@ -86,7 +86,7 @@ public class PlayerDashState : PlayerAbilityState
             CheckIfShouldPlaceAfterImage();
             if (Time.time >= startTime + playerData.dashTime)
             {
-                player.Core.Movement.rb.drag = 0f;
+                player.Core.Movement.RB.drag = 0f;
                 isAbilityDone = true; 
                 lastDashTime = Time.time;
             }

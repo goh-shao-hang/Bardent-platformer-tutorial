@@ -39,6 +39,8 @@ public class IdleState : EnemyState
     {
         base.LogicUpdate();
 
+        core.Movement.SetVelocityX(0f);
+
         if (Time.time > startTime + idleTime)
             isIdleTimeOver = true;
     }

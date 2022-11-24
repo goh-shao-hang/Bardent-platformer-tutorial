@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerCombatController : MonoBehaviour
 {
-    private Animator anim;
+    /*private Animator anim;
     private PlayerController pc;
     private PlayerStats ps;
 
@@ -118,5 +118,5 @@ public class PlayerCombatController : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(attack1HitboxPos.position, attack1Radius);
-    }
+    }*/
 }

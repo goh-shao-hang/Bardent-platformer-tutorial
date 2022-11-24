@@ -34,6 +34,8 @@ public class ChargeState : EnemyState
     {
         base.LogicUpdate();
 
+        core.Movement.SetVelocityX(stateData.chargeSpeed * core.Movement.FacingDirection);
+
         if (Time.time >= startTime + stateData.chargeTime)
         {
             isChargeTimeOver = true;

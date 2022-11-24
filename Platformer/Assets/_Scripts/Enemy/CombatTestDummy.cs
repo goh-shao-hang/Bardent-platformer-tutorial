@@ -20,7 +20,7 @@ public class CombatTestDummy : MonoBehaviour, IDamageable
     {
         Debug.Log(amount + "damage taken");
 
-        Instantiate(hitParticles, transform.position, Quaternion.Euler(0f, 0f, Random.Range(0f, 360f)));
+        Destroy(Instantiate(hitParticles, transform.position, Quaternion.Euler(0f, 0f, Random.Range(0f, 360f))), 3f);
         anim.SetTrigger("damage");
         CameraManager.CameraShake(0.15f);
         //Destroy(gameObject);

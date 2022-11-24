@@ -16,7 +16,7 @@ public class Projectile : MonoBehaviour
     [SerializeField] private LayerMask whatIsPlayer;
     
 
-    private AttackDetails attackDetails;
+    //private AttackDetails attackDetails;
     private float speed;
     private float travelDistance;
     private float xStartPos;
@@ -36,7 +36,7 @@ public class Projectile : MonoBehaviour
     {
         if (!hasHitGround)
         {
-            attackDetails.position = transform.position;
+            //attackDetails.position = transform.position;
 
             if (isGravityOn)
             {
@@ -55,7 +55,7 @@ public class Projectile : MonoBehaviour
 
             if (damageHit)
             {
-                damageHit.transform.GetComponent<PlayerCombatController>()?.TakeDamage(attackDetails);
+                //damageHit.transform.GetComponent<PlayerCombatController>()?.TakeDamage(attackDetails);
                 Destroy(gameObject);
             }
             
@@ -78,7 +78,7 @@ public class Projectile : MonoBehaviour
     {
         this.speed = speed;
         this.travelDistance = travelDistance;
-        attackDetails.damageAmount = damage;
+        //attackDetails.damageAmount = damage;
     }
 
     private void OnDrawGizmos()

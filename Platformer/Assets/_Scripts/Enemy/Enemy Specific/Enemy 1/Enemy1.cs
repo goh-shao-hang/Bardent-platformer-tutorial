@@ -26,9 +26,9 @@ public class Enemy1 : Enemy
     [Header("Assignables")]
     [SerializeField] private Transform meleeAttackPosition;
 
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
 
         idleState = new E1_IdleState(this, StateMachine, "idle", idleStateData);
         moveState = new E1_MoveState(this, StateMachine, "move", moveStateData);
@@ -38,6 +38,11 @@ public class Enemy1 : Enemy
         meleeAttackState = new E1_MeleeAttackState(this, StateMachine, "meleeAttack", meleeAttackPosition , meleeAttackStateData);
         stunState = new E1_StunState(this, StateMachine, "stun", stunStateData);
         deadState = new E1_DeadState(this, StateMachine, "dead", deadStateData);
+    }
+
+    protected override void Start()
+    {
+        base.Start();
 
         StateMachine.Inititalize(moveState);
     }
@@ -49,18 +54,4 @@ public class Enemy1 : Enemy
         Gizmos.DrawWireSphere(meleeAttackPosition.position, meleeAttackStateData.attackRadius);
     }
 
-    public override void TakeDamage(AttackDetails attackDetails)
-    {
-        base.TakeDamage(attackDetails);
-
-        if (isDead)
-        {
-            StateMachine.ChangeState(deadState);
-        }
-        else if (isStunned && StateMachine.CurrentState != stunState)
-        {
-            StateMachine.ChangeState(stunState);
-        }
-        
-    }
 }

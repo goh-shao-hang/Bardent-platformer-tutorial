@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Utilities.ComponentErrorHandler;
+using Utilities;
 
 public class CollisionSenses : CoreComponent
 {
@@ -13,11 +13,11 @@ public class CollisionSenses : CoreComponent
     [SerializeField] private Transform ledgeCheckVertical;
     [SerializeField] private Transform ceilingCheck;
 
-    public Transform GroundCheck => ReturnIfNotNull(groundCheck, core.transform.parent.name);
-    public Transform WallCheck => ReturnIfNotNull(wallCheck, core.transform.parent.name);
-    public Transform LedgeCheckHorizontal => ReturnIfNotNull(ledgeCheckHorizontal, core.transform.parent.name);
-    public Transform LedgeCheckVertical => ReturnIfNotNull(ledgeCheckVertical, core.transform.parent.name);
-    public Transform CeilingCheck => ReturnIfNotNull(ceilingCheck, core.transform.parent.name);
+    public Transform GroundCheck => GenericNotImplementedError.TryGet(groundCheck, core.transform.parent.name);
+    public Transform WallCheck => GenericNotImplementedError.TryGet(wallCheck, core.transform.parent.name);
+    public Transform LedgeCheckHorizontal => GenericNotImplementedError.TryGet(ledgeCheckHorizontal, core.transform.parent.name);
+    public Transform LedgeCheckVertical => GenericNotImplementedError.TryGet(ledgeCheckVertical, core.transform.parent.name);
+    public Transform CeilingCheck => GenericNotImplementedError.TryGet(ceilingCheck, core.transform.parent.name);
 
     [SerializeField] private float groundCheckRadius;
     [SerializeField] private float wallCheckDistance;

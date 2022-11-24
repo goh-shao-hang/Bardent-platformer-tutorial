@@ -6,6 +6,7 @@ public class Weapon : MonoBehaviour
 {
     [SerializeField] protected SO_WeaponData weaponData;
 
+    protected Core core;
     protected PlayerAttackState state;
     protected Animator baseAnimator;
     protected Animator weaponAnimator;
@@ -45,8 +46,9 @@ public class Weapon : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    public void InitializeWeapon(PlayerAttackState state)
+    public void InitializeWeapon(PlayerAttackState state, Core core)
     {
+        this.core = core;
         this.state = state;
     }
 
