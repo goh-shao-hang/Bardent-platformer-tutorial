@@ -45,7 +45,7 @@ public class MeleeAttackState : AttackState
         foreach (Collider2D collider in detectedObjects)
         {
             collider.GetComponent<IDamageable>()?.TakeDamage(stateData.attackDamage);
-            collider.GetComponent<IKnockbackable>()?.Knockback(stateData.knockbackStrength, stateData.knockbackAngle, core.Movement.FacingDirection);
+            collider.GetComponent<IKnockbackable>()?.Knockback(stateData.knockbackStrength, stateData.knockbackAngle, Movement.FacingDirection);
         }
     }
 

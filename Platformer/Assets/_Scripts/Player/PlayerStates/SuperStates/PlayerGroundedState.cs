@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class PlayerGroundedState : PlayerState
 {
+    private Movement movement;
+    protected Movement Movement => movement ??= core.GetCoreComponent<Movement>();
+
+    private CollisionSenses collisionSenses;
+    private CollisionSenses CollisionSenses => collisionSenses ??= core.GetCoreComponent<CollisionSenses>();
+    
     protected int xInput;
     protected int yInput;
     private bool jumpInput;
@@ -22,10 +28,13 @@ public class PlayerGroundedState : PlayerState
     {
         base.DoChecks();
 
-        isGrounded = core.CollisionSenses.Ground;
-        isTouchingWall = core.CollisionSenses.WallFront;
-        isTouchingLedge = core.CollisionSenses.LedgeHorizontal;
-        isTouchingCeiling = core.CollisionSenses.Ceiling;
+        if (CollisionSenses)
+        {
+            isGrounded = CollisionSenses.Ground;
+            isTouchingWall = CollisionSenses.WallFront;
+            isTouchingLedge = CollisionSenses.LedgeHorizontal;
+            isTouchingCeiling = CollisionSenses.Ceiling;
+        }
     }
 
     public override void Enter()

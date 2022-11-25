@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class PlayerLedgeClimbState : PlayerState
 {
+    private Movement movement;
+    private CollisionSenses collisionSenses;
+
+    protected Movement Movement => movement ??= core.GetCoreComponent<Movement>();
+    private CollisionSenses CollisionSenses => collisionSenses ??= core.GetCoreComponent<CollisionSenses>();
+
     private Vector2 vector2Workspace;
     private Vector2 detectedPos;
     private Vector2 cornerPos;
@@ -26,13 +32,13 @@ public class PlayerLedgeClimbState : PlayerState
     {
         base.Enter();
 
-        core.Movement.SetVelocityZero();
+        Movement?.SetVelocityZero();
         player.transform.position = detectedPos; //Lock player in this position before ledge climbing. We actually just want to use this position to do calculations.
         cornerPos = DetermineLedgeCornerPosition();
 
         //                substract here             because if we are facing right, we want to shift the xOffset to the left (by subtracting it) to get the startPos and vice versa. Reversed for endPos.
-        startPos.Set(cornerPos.x - (core.Movement.FacingDirection * playerData.startOffset.x), cornerPos.y - playerData.startOffset.y);
-        endPos.Set(cornerPos.x + (core.Movement.FacingDirection * playerData.startOffset.x), cornerPos.y + playerData.endOffset.y);
+        startPos.Set(cornerPos.x - (Movement.FacingDirection * playerData.startOffset.x), cornerPos.y - playerData.startOffset.y);
+        endPos.Set(cornerPos.x + (Movement.FacingDirection * playerData.startOffset.x), cornerPos.y + playerData.endOffset.y);
 
         player.transform.position = startPos;
     }
@@ -71,16 +77,16 @@ public class PlayerLedgeClimbState : PlayerState
             yInput = player.InputHandler.NormalizedInputY;
             jumpInput = player.InputHandler.JumpInput;
 
-            core.Movement.SetVelocityZero();
+            Movement?.SetVelocityZero();
             player.transform.position = startPos;
 
-            if ((xInput == core.Movement.FacingDirection || yInput == 1) && isHanging && !isClimbing) //Start climbing if player inputs towards the ledge
+            if ((xInput == Movement?.FacingDirection || yInput == 1) && isHanging && !isClimbing) //Start climbing if player inputs towards the ledge
             {
                 CheckForCeilingAboveLedge();
                 isClimbing = true;
                 player.anim.SetBool("climbLedge", true);
             }
-            else if ((yInput == -1 || xInput == -core.Movement.FacingDirection) && isHanging && !isClimbing) //Drop from ledge if player inputs down
+            else if ((yInput == -1 || xInput == -Movement?.FacingDirection) && isHanging && !isClimbing) //Drop from ledge if player inputs down
             {
                 stateMachine.ChangeState(player.InAirState);
             }
@@ -111,21 +117,21 @@ public class PlayerLedgeClimbState : PlayerState
     private void CheckForCeilingAboveLedge()
     {
                                                             //Offset upwards        Offset into ledge
-        isTouchingCeiling = Physics2D.Raycast(cornerPos + (Vector2.up * 0.015f) + (Vector2.right * 0.015f * core.Movement.FacingDirection), Vector2.up, playerData.standColliderHeight, core.CollisionSenses.WhatIsGround);
+        isTouchingCeiling = Physics2D.Raycast(cornerPos + (Vector2.up * 0.015f) + (Vector2.right * 0.015f * Movement.FacingDirection), Vector2.up, playerData.standColliderHeight, CollisionSenses.WhatIsGround);
         player.anim.SetBool("isTouchingCeiling", isTouchingCeiling);
     }
 
     private Vector2 DetermineLedgeCornerPosition()
     {
-        RaycastHit2D xHit = Physics2D.Raycast(core.CollisionSenses.WallCheck.position, Vector2.right * core.Movement.FacingDirection, core.CollisionSenses.WallCheckDistance, core.CollisionSenses.WhatIsGround);
+        RaycastHit2D xHit = Physics2D.Raycast(CollisionSenses.WallCheck.position, Vector2.right * Movement.FacingDirection, CollisionSenses.WallCheckDistance, CollisionSenses.WhatIsGround);
         float xDist = xHit.distance; //Distance of the raycast hit position from the raycast origin used to determine the position of the ledge corner
 
-        vector2Workspace.Set((xDist + 0.015f) * core.Movement.FacingDirection, 0f);
-        RaycastHit2D yHit = Physics2D.Raycast(core.CollisionSenses.LedgeCheckHorizontal.position + (Vector3)vector2Workspace, Vector2.down, core.CollisionSenses.LedgeCheckHorizontal.position.y - core.CollisionSenses.WallCheck.position.y + 0.015f, core.CollisionSenses.WhatIsGround);
+        vector2Workspace.Set((xDist + 0.015f) * Movement.FacingDirection, 0f);
+        RaycastHit2D yHit = Physics2D.Raycast(CollisionSenses.LedgeCheckHorizontal.position + (Vector3)vector2Workspace, Vector2.down, CollisionSenses.LedgeCheckHorizontal.position.y - CollisionSenses.WallCheck.position.y + 0.015f, CollisionSenses.WhatIsGround);
         //By offsetting our y raycast with the x distance, we ensure that we can fire a vertical raycast to hit the ledge corner and determine the y position of the ledge
         float yDist = yHit.distance;
 
-        vector2Workspace.Set(core.CollisionSenses.WallCheck.position.x + (xDist * core.Movement.FacingDirection), core.CollisionSenses.LedgeCheckHorizontal.position.y - yDist); //Final determined corner position
+        vector2Workspace.Set(CollisionSenses.WallCheck.position.x + (xDist * Movement.FacingDirection), CollisionSenses.LedgeCheckHorizontal.position.y - yDist); //Final determined corner position
         return vector2Workspace;
     }
 }

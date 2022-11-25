@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class PlayerInAirState : PlayerState //Not a superstate but is not part of any superstate
 {
+    private Movement movement;
+    private CollisionSenses collisionSenses;
+
+    protected Movement Movement => movement ??= core.GetCoreComponent<Movement>();
+    private CollisionSenses CollisionSenses => collisionSenses ??= core.GetCoreComponent<CollisionSenses>();
+
     //Input
     private int xInput;
     private bool jumpInput;
@@ -34,11 +40,14 @@ public class PlayerInAirState : PlayerState //Not a superstate but is not part o
         isTouchingWallPreviousFrame = isTouchingWall;
         isTouchingWallBackPreviousFrame = isTouchingWallBack;
 
-        isGrounded = core.CollisionSenses.Ground;
-        isTouchingWall = core.CollisionSenses.WallFront;
-        isTouchingWallBack = core.CollisionSenses.WallBack;
-        isTouchingLedge = core.CollisionSenses.LedgeHorizontal;
-
+        if (CollisionSenses)
+        {
+            isGrounded = CollisionSenses.Ground;
+            isTouchingWall = CollisionSenses.WallFront;
+            isTouchingWallBack = CollisionSenses.WallBack;
+            isTouchingLedge = CollisionSenses.LedgeHorizontal;
+        }
+        
         if (isTouchingWall && !isTouchingLedge)
         {
             player.LedgeClimbState.SetDetectedPosition(player.transform.position);
@@ -88,7 +97,7 @@ public class PlayerInAirState : PlayerState //Not a superstate but is not part o
         {
             stateMachine.ChangeState(player.SecondaryAttackState);
         }
-        else if (isGrounded && core.Movement.CurrentVelocity.y < 0.01f)
+        else if (isGrounded && Movement?.CurrentVelocity.y < 0.01f)
         {
             stateMachine.ChangeState(player.LandState);
         }
@@ -99,7 +108,7 @@ public class PlayerInAirState : PlayerState //Not a superstate but is not part o
         else if (jumpInput && (isTouchingWall || isTouchingWallBack || isInWallJumpCoyoteTime)) //Wall jump
         {
             StopWallJumpCoyoteTime();
-            isTouchingWall = core.CollisionSenses.WallFront; //We need to manually set this again since isTouchingWall is normally checked in fixed update but this code is ran in update. Without this, isTouchingWall might sometimes not be updated, causing the player to wall jump towards the wrong direction.
+            isTouchingWall = CollisionSenses.WallFront; //We need to manually set this again since isTouchingWall is normally checked in fixed update but this code is ran in update. Without this, isTouchingWall might sometimes not be updated, causing the player to wall jump towards the wrong direction.
             player.WallJumpState.DetermineWallJumpDirection(isTouchingWall);
             stateMachine.ChangeState(player.WallJumpState);
         }
@@ -111,7 +120,7 @@ public class PlayerInAirState : PlayerState //Not a superstate but is not part o
         {
             stateMachine.ChangeState(player.WallGrabState);
         }
-        else if (isTouchingWall && xInput == core.Movement.FacingDirection && core.Movement.CurrentVelocity.y <= 0) //If player input towards wall, wall slide (also make sure player is falling before entering wall slide)
+        else if (isTouchingWall && xInput == Movement?.FacingDirection && Movement?.CurrentVelocity.y <= 0) //If player input towards wall, wall slide (also make sure player is falling before entering wall slide)
         {
             stateMachine.ChangeState(player.WallSlideState);
         }
@@ -121,10 +130,10 @@ public class PlayerInAirState : PlayerState //Not a superstate but is not part o
         }
         else
         {
-            core.Movement.CheckIfShouldFlip(xInput);
-            core.Movement.SetVelocityX(playerData.moveSpeed * xInput);
-            player.anim.SetFloat("yVelocity", core.Movement.CurrentVelocity.y);
-            player.anim.SetFloat("xVelocity", Mathf.Abs(core.Movement.CurrentVelocity.x));
+            Movement?.CheckIfShouldFlip(xInput);
+            Movement?.SetVelocityX(playerData.moveSpeed * xInput);
+            player.anim.SetFloat("yVelocity", Movement.CurrentVelocity.y);
+            player.anim.SetFloat("xVelocity", Mathf.Abs(Movement.CurrentVelocity.x));
         }
     }
 
@@ -135,9 +144,9 @@ public class PlayerInAirState : PlayerState //Not a superstate but is not part o
             if (jumpInputStop)
             {
                 isJumping = false;
-                core.Movement.SetVelocityY(core.Movement.CurrentVelocity.y * playerData.variableJumpHeightMultiplier);
+                Movement?.SetVelocityY(Movement.CurrentVelocity.y * playerData.variableJumpHeightMultiplier);
             }
-            else if (core.Movement.CurrentVelocity.y <= 0)
+            else if (Movement?.CurrentVelocity.y <= 0)
                 isJumping = false;
         }
     }

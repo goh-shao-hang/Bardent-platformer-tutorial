@@ -21,9 +21,12 @@ public class StunState : EnemyState
     {
         base.DoChecks();
 
-        isGrounded = core.CollisionSenses.Ground;
-        performCloseRangeAction = enemy.CheckPlayerInCloseRangeAction();
-        isPlayerInMinAggroRange = enemy.CheckPlayerInMinAggroRange();
+        if (CollisionSenses)
+        {
+            isGrounded = CollisionSenses.Ground;
+            performCloseRangeAction = enemy.CheckPlayerInCloseRangeAction();
+            isPlayerInMinAggroRange = enemy.CheckPlayerInMinAggroRange();
+        }
     }
 
     public override void Enter()
@@ -32,7 +35,7 @@ public class StunState : EnemyState
 
         isStunTimeOver = false;
         isMovementStopped = false;
-        core.Movement.SetVelocity(stateData.stunKnockbackSpeed, stateData.stunKnockbackAngle, enemy.lastDamageDirection);
+        Movement?.SetVelocity(stateData.stunKnockbackSpeed, stateData.stunKnockbackAngle, enemy.lastDamageDirection);
     }
 
     public override void Exit()
@@ -52,7 +55,7 @@ public class StunState : EnemyState
         if (isGrounded && Time.time >= startTime + stateData.stunKnockbackTime && !isMovementStopped) //Make sure the velocity can only be set to 0 if the enemy hits the ground after being knocked back after a certain amount of time
         {
             isMovementStopped = true; //only get into this if statement once, so that the enemy is not continuously stopped and we can make a bounce effect or other stuff otherwards
-            core.Movement.SetVelocityX(0f);
+            Movement?.SetVelocityX(0f);
         }
     }
             

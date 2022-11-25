@@ -28,7 +28,7 @@ public class PlayerDashState : PlayerAbilityState
         player.InputHandler.UseDashInput();
 
         isHolding = true;
-        dashDirection = Vector2.right * core.Movement.FacingDirection; //Default dash direction
+        dashDirection = Vector2.right * Movement.FacingDirection; //Default dash direction
 
         Time.timeScale = playerData.holdTimeScale;
         startTime = Time.unscaledTime; //Time.time will not work after the first dash since it is scaled during the slowmo
@@ -40,9 +40,9 @@ public class PlayerDashState : PlayerAbilityState
     {
         base.Exit();
 
-        if (core.Movement.CurrentVelocity.y > 0) //Limit y velocity if finish dashing up. We only need to care about upwards y velocity since x velocity is constantly handled, and we don't want to decrease downwards velocity when dashing down
+        if (Movement?.CurrentVelocity.y > 0) //Limit y velocity if finish dashing up. We only need to care about upwards y velocity since x velocity is constantly handled, and we don't want to decrease downwards velocity when dashing down
         {
-            core.Movement.SetVelocityY(core.Movement.CurrentVelocity.y * playerData.dashEndYMultipler);
+            Movement?.SetVelocityY(Movement.CurrentVelocity.y * playerData.dashEndYMultipler);
         }
     }
 
@@ -52,8 +52,8 @@ public class PlayerDashState : PlayerAbilityState
 
         if (isExitingState) return;
 
-        player.anim.SetFloat("yVelocity", core.Movement.CurrentVelocity.y);
-        player.anim.SetFloat("xVelocity", Mathf.Abs(core.Movement.CurrentVelocity.x));
+        player.anim.SetFloat("yVelocity", Movement.CurrentVelocity.y);
+        player.anim.SetFloat("xVelocity", Mathf.Abs(Movement.CurrentVelocity.x));
 
         if (isHolding) //In slowmo phase
         {
@@ -73,20 +73,20 @@ public class PlayerDashState : PlayerAbilityState
                 isHolding = false;
                 Time.timeScale = 1f;
                 startTime = Time.time; //Reset start time to unscaled time to track how long have we dashed for
-                core.Movement.CheckIfShouldFlip(Mathf.RoundToInt(dashDirection.x)); //Flip if dashing backwards
-                player.Core.Movement.RB.drag = playerData.drag;
-                core.Movement.SetVelocity(playerData.dashSpeed, dashDirection);
+                Movement?.CheckIfShouldFlip(Mathf.RoundToInt(dashDirection.x)); //Flip if dashing backwards
+                Movement.RB.drag = playerData.drag;
+                Movement?.SetVelocity(playerData.dashSpeed, dashDirection);
                 player.DashDirectionIndicator.gameObject.SetActive(false);
                 PlaceAfterImage();
             }
         }
         else //is dashing
         {
-            core.Movement.SetVelocity(playerData.dashSpeed, dashDirection);
+            Movement?.SetVelocity(playerData.dashSpeed, dashDirection);
             CheckIfShouldPlaceAfterImage();
             if (Time.time >= startTime + playerData.dashTime)
             {
-                player.Core.Movement.RB.drag = 0f;
+                Movement.RB.drag = 0f;
                 isAbilityDone = true; 
                 lastDashTime = Time.time;
             }

@@ -1,43 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 using Utilities;
 
 public class Core : MonoBehaviour
 {
-    private Movement movement;
-    private CollisionSenses collisionSenses;
-    private Combat combat;
-    private Stats stats;
-
-    private List<ILogicUpdate> components = new List<ILogicUpdate>();
-
-    public Movement Movement => GenericNotImplementedError.TryGet(movement, transform.parent.name);
-    public CollisionSenses CollisionSenses => GenericNotImplementedError.TryGet(collisionSenses, transform.parent.name);
-    public Combat Combat => GenericNotImplementedError.TryGet(combat, transform.parent.name);
-    public Stats Stats => GenericNotImplementedError.TryGet(stats, transform.parent.name);
+    private readonly List<CoreComponent> coreComponents = new List<CoreComponent>();
 
     private void Awake()
     {
-        movement = GetComponentInChildren<Movement>();
-        collisionSenses = GetComponentInChildren<CollisionSenses>();
-        combat = GetComponentInChildren<Combat>();
-        stats = GetComponentInChildren<Stats>();
+
     }
 
     public void LogicUpdate()
     {
-        foreach (ILogicUpdate component in components)
+        foreach (CoreComponent component in coreComponents)
         {
             component.LogicUpdate();
         }
     }
 
-    public void AddComponent(ILogicUpdate component)
+    public void AddComponent(CoreComponent component)
     {
-        if (!components.Contains(component))
+        if (!coreComponents.Contains(component))
         {
-            components.Add(component);
+            coreComponents.Add(component);
         }
+    }
+
+    public T GetCoreComponent<T>() where T: CoreComponent
+    {
+        T component = coreComponents.OfType<T>().FirstOrDefault();
+
+        if (component == null)
+        {
+            Debug.LogWarning($"{typeof(T)} not found on {transform.parent.name}");
+        }
+        return component;
+    }
+
+    public T GetCoreComponent<T>(ref T value) where T: CoreComponent //Alternate verision that immediately assigns the retrived component to the reference passed in
+    {
+        value = GetCoreComponent<T>();
+        return value;
     }
 }

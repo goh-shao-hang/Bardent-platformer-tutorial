@@ -22,7 +22,7 @@ public class PlayerDetectedState : EnemyState
         base.Enter();
 
         performLongRangeAction = false;
-        core.Movement.SetVelocityX(0f);
+        Movement?.SetVelocityX(0f);
     }
 
     public override void Exit()
@@ -34,7 +34,7 @@ public class PlayerDetectedState : EnemyState
     {
         base.LogicUpdate();
 
-        core.Movement.SetVelocityX(0f);
+        Movement?.SetVelocityX(0f);
 
         if (Time.time >= startTime + stateData.longRangeActionTime)
         {
@@ -51,9 +51,12 @@ public class PlayerDetectedState : EnemyState
     {
         base.DoChecks();
 
-        isPlayerInMinAggroRange = enemy.CheckPlayerInMinAggroRange();
-        isPlayerInMaxAggroRange = enemy.CheckPlayerInMaxAggroRange();
-        isDetectingLedge = core.CollisionSenses.LedgeVertical;
-        performCloseRangeAction = enemy.CheckPlayerInCloseRangeAction();
+        if (CollisionSenses)
+        {
+            isPlayerInMinAggroRange = enemy.CheckPlayerInMinAggroRange();
+            isPlayerInMaxAggroRange = enemy.CheckPlayerInMaxAggroRange();
+            isDetectingLedge = CollisionSenses.LedgeVertical;
+            performCloseRangeAction = enemy.CheckPlayerInCloseRangeAction();
+        }   
     }
 }

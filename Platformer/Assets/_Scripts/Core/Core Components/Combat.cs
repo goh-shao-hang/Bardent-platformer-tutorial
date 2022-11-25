@@ -5,6 +5,14 @@ using Utilities;
 
 public class Combat : CoreComponent, IDamageable, IKnockbackable
 {
+    private Movement movement;
+    private CollisionSenses collisionSenses;
+    private Stats stats;
+
+    private Movement Movement => movement ??= core.GetCoreComponent<Movement>();
+    private CollisionSenses CollisionSenses => collisionSenses ??= core.GetCoreComponent<CollisionSenses>();
+    private Stats Stats => stats ??= core.GetCoreComponent<Stats>();
+    
     [SerializeField] private float maxKnockbackTime = 0.2f;
 
     private bool isKnockbackActive = false;
@@ -13,13 +21,13 @@ public class Combat : CoreComponent, IDamageable, IKnockbackable
     public void TakeDamage(float amount)
     {
         Debug.Log($"{core.transform.parent.name} damaged!");
-        core.Stats.DecreaseHealth(amount);
+        Stats?.DecreaseHealth(amount);
     }
 
     public void Knockback(float strength, Vector2 angle, int direction)
     {
-        core.Movement.SetVelocity(strength, angle, direction);
-        core.Movement.AllowSetVelocity(false);
+        Movement?.SetVelocity(strength, angle, direction);
+        Movement?.AllowSetVelocity(false);
         StartCoroutine(CheckKnockback());
     }
 
@@ -27,12 +35,12 @@ public class Combat : CoreComponent, IDamageable, IKnockbackable
     {
         isKnockbackActive = true;
 
-        while (!(isKnockbackActive && (core.Movement.CurrentVelocity.y <= 0.01f && core.CollisionSenses.Ground) || Time.time >= knockbackStartTime + maxKnockbackTime))
+        while (!(isKnockbackActive && (Movement?.CurrentVelocity.y <= 0.01f && CollisionSenses.Ground) || Time.time >= knockbackStartTime + maxKnockbackTime))
         {
             yield return null;
         }
 
         isKnockbackActive = false;
-        core.Movement.AllowSetVelocity(true);
+        Movement.AllowSetVelocity(true);
     }
 }

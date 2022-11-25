@@ -19,7 +19,7 @@ public class MoveState : EnemyState
     {
         base.Enter();
 
-        core.Movement.SetVelocityX(stateData.movementSpeed * core.Movement.FacingDirection);
+        Movement?.SetVelocityX(stateData.movementSpeed * Movement.FacingDirection);
     }
 
     public override void Exit()
@@ -31,7 +31,7 @@ public class MoveState : EnemyState
     {
         base.LogicUpdate();
 
-        core.Movement.SetVelocityX(stateData.movementSpeed * core.Movement.FacingDirection);
+        Movement?.SetVelocityX(stateData.movementSpeed * Movement.FacingDirection);
     }
 
     public override void PhysicsUpdate()
@@ -43,8 +43,11 @@ public class MoveState : EnemyState
     {
         base.DoChecks();
 
-        isDetectingLedge = core.CollisionSenses.LedgeVertical;
-        isDetectingWall = core.CollisionSenses.WallFront;
-        isPlayerInMinAggroRange = enemy.CheckPlayerInMinAggroRange();
+        if (CollisionSenses)
+        {
+            isDetectingLedge = CollisionSenses.LedgeVertical;
+            isDetectingWall = CollisionSenses.WallFront;
+            isPlayerInMinAggroRange = enemy.CheckPlayerInMinAggroRange();
+        }
     }
 }

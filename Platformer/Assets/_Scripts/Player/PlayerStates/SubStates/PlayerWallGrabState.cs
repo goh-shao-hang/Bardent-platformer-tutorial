@@ -39,7 +39,7 @@ public class PlayerWallGrabState : PlayerTouchingWallState
     private void HoldPosition()
     {
         player.transform.position = holdPosition; //Prevents gravity from causing player to slide
-        core.Movement.SetVelocityX(0f);
-        core.Movement.SetVelocityY(0f);
+        Movement?.SetVelocityX(0f);
+        Movement?.SetVelocityY(0f);
     }
 }

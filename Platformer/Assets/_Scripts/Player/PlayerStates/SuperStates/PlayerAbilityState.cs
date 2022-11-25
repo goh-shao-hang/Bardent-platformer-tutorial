@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class PlayerAbilityState : PlayerState
 {
+    private Movement movement;
+    private CollisionSenses collisionSenses;
+
+    protected Movement Movement => movement ??= core.GetCoreComponent<Movement>();
+    private CollisionSenses CollisionSenses => collisionSenses ??= core.GetCoreComponent<CollisionSenses>();
+
     protected bool isAbilityDone;
 
     private bool isGrounded;
@@ -16,7 +22,8 @@ public class PlayerAbilityState : PlayerState
     {
         base.DoChecks();
 
-        isGrounded = core.CollisionSenses.Ground;
+        if (CollisionSenses)
+            isGrounded = CollisionSenses.Ground;
     }
 
     public override void Enter()
@@ -37,7 +44,7 @@ public class PlayerAbilityState : PlayerState
 
         if (isAbilityDone)
         {
-            if (isGrounded && core.Movement.CurrentVelocity.y < 0.01f)
+            if (isGrounded && Movement?.CurrentVelocity.y < 0.01f)
             {
                 stateMachine.ChangeState(player.IdleState);
             }

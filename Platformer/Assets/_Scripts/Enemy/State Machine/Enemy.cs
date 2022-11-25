@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Enemy : Entity
 {
+    private Movement movement;
+
+    private Movement Movement => movement ??= Core.GetCoreComponent<Movement>();
+
     [Header("Base Data")]
     public D_Enemy enemyData;
 
@@ -48,7 +52,7 @@ public class Enemy : Entity
         {
             ResetStunResistance();
 
-            anim.SetFloat("yVelocity", Core.Movement.RB.velocity.y);
+            anim.SetFloat("yVelocity", Movement.RB.velocity.y);
         }
     }
 
@@ -75,17 +79,17 @@ public class Enemy : Entity
 
     public virtual void DamageHop(float yVelocity)
     {
-        Core.Movement.RB.velocity = new Vector2(Core.Movement.RB.velocity.x, yVelocity);
+        Movement.RB.velocity = new Vector2(Movement.RB.velocity.x, yVelocity);
     }
 
     public virtual void OnDrawGizmos()
     {
         if (Core == null) return;
 
-        Gizmos.DrawLine(wallCheck.position, wallCheck.position + (Vector3)(Vector2.right * Core.Movement.FacingDirection * enemyData.wallCheckDistance));
+        Gizmos.DrawLine(wallCheck.position, wallCheck.position + (Vector3)(Vector2.right * Movement.FacingDirection * enemyData.wallCheckDistance));
         Gizmos.DrawLine(ledgeCheck.position, ledgeCheck.position + (Vector3)(Vector2.down * enemyData.ledgeCheckDistance));
-        Gizmos.DrawWireSphere(playerCheck.position + (Vector3)(Vector2.right * Core.Movement.FacingDirection * enemyData.closeRangeActionDistance), 0.2f);
-        Gizmos.DrawWireSphere(playerCheck.position + (Vector3)(Vector2.right * Core.Movement.FacingDirection * enemyData.minAggroDistance), 0.2f);
-        Gizmos.DrawWireSphere(playerCheck.position + (Vector3)(Vector2.right * Core.Movement.FacingDirection * enemyData.maxAggroDistance), 0.2f);
+        Gizmos.DrawWireSphere(playerCheck.position + (Vector3)(Vector2.right * Movement.FacingDirection * enemyData.closeRangeActionDistance), 0.2f);
+        Gizmos.DrawWireSphere(playerCheck.position + (Vector3)(Vector2.right * Movement.FacingDirection * enemyData.minAggroDistance), 0.2f);
+        Gizmos.DrawWireSphere(playerCheck.position + (Vector3)(Vector2.right * Movement.FacingDirection * enemyData.maxAggroDistance), 0.2f);
     }
 }
