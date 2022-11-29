@@ -36,7 +36,7 @@ public class PlayerTouchingWallState : PlayerState
     {
         base.DoChecks();
 
-        if (collisionSenses)
+        if (CollisionSenses)
         {
             isGrounded = CollisionSenses.Ground;
             isTouchingWall = CollisionSenses.WallFront;

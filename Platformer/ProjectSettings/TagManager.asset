@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - ParticleContainer
   layers:
   - Default
   - TransparentFX
@@ -59,4 +60,10 @@ TagManager:
     locked: 0
   - name: Foreground Decorations
     uniqueID: 761313921
+    locked: 0
+  - name: 2D Effects
+    uniqueID: 3537450437
+    locked: 0
+  - name: 2D Effects 2
+    uniqueID: 1741663541
     locked: 0
