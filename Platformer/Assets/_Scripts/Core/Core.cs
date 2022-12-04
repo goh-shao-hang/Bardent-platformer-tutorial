@@ -6,7 +6,7 @@ using Utilities;
 
 public class Core : MonoBehaviour
 {
-    private readonly List<CoreComponent> coreComponents = new List<CoreComponent>();
+    private readonly List<CoreComponent> CoreComponents = new List<CoreComponent>();
 
     private void Awake()
     {
@@ -15,7 +15,7 @@ public class Core : MonoBehaviour
 
     public void LogicUpdate()
     {
-        foreach (CoreComponent component in coreComponents)
+        foreach (CoreComponent component in CoreComponents)
         {
             component.LogicUpdate();
         }
@@ -23,21 +23,25 @@ public class Core : MonoBehaviour
 
     public void AddComponent(CoreComponent component)
     {
-        if (!coreComponents.Contains(component))
+        if (!CoreComponents.Contains(component))
         {
-            coreComponents.Add(component);
+            CoreComponents.Add(component);
         }
     }
 
     public T GetCoreComponent<T>() where T: CoreComponent
     {
-        T component = coreComponents.OfType<T>().FirstOrDefault();
+        T component = CoreComponents.OfType<T>().FirstOrDefault();
+    
+        if (component) return component;
 
-        if (component == null)
-        {
-            Debug.LogWarning($"{typeof(T)} not found on {transform.parent.name}");
-        }
-        return component;
+        component = GetComponentInChildren<T>(); //Manually set the reference for the core if the core does not have a reference yet due to the referred component not being awake
+
+        if (component) return component;
+        
+        Debug.LogWarning($"{typeof(T)} not found on {transform.parent.name}");
+
+        return null;
     }
 
     public T GetCoreComponent<T>(ref T value) where T: CoreComponent //Alternate verision that immediately assigns the retrived component to the reference passed in

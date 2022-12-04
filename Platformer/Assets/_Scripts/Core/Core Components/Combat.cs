@@ -38,7 +38,7 @@ public class Combat : CoreComponent, IDamageable, IKnockbackable
     {
         Movement?.SetVelocity(strength, angle, direction);
         Movement?.AllowSetVelocity(false);
-        StartCoroutine(CheckKnockback());
+        if (this.gameObject.activeInHierarchy) StartCoroutine(CheckKnockback());
         CameraManager.CameraShake(cameraShakeIntensity);
     }
 
@@ -54,4 +54,5 @@ public class Combat : CoreComponent, IDamageable, IKnockbackable
         isKnockbackActive = false;
         Movement.AllowSetVelocity(true);
     }
+    
 }
