@@ -15,11 +15,11 @@ public class Player : Entity
     public PlayerInputHandler InputHandler { get; private set; }
     public BoxCollider2D MovementCollider { get; private set; }
     public Transform DashDirectionIndicator => dashDirectionIndicator;
-    public PlayerInventory Inventory { get; private set; }
 
     #endregion
 
     #region States
+    
     public PlayerIdleState IdleState { get; private set; }
     public PlayerMoveState MoveState { get; private set; }
     public PlayerJumpState JumpState { get; private set; }
@@ -66,10 +66,6 @@ public class Player : Entity
 
         InputHandler = GetComponent<PlayerInputHandler>();
         MovementCollider = GetComponent<BoxCollider2D>();
-        Inventory = GetComponent<PlayerInventory>();
-
-        PrimaryAttackState.SetWeapon(Inventory.weapons[((int)CombatInputs.Primary)]);
-        //SecondaryAttackState.SetWeapon(Inventory.weapons[((int)CombatInputs.Secondary)]);
 
         StateMachine.Inititalize(IdleState);
     }
