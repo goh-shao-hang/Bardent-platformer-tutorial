@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Gamecells.Weapons;
 using UnityEngine;
 
 public class Player : Entity
@@ -18,8 +19,11 @@ public class Player : Entity
 
     #endregion
 
+    private Weapon primaryWeapon;
+    private Weapon secondaryWeapon;
+
     #region States
-    
+
     public PlayerIdleState IdleState { get; private set; }
     public PlayerMoveState MoveState { get; private set; }
     public PlayerJumpState JumpState { get; private set; }
@@ -43,6 +47,9 @@ public class Player : Entity
     {
         base.Awake();
 
+        primaryWeapon = transform.Find("PrimaryWeapon").GetComponent<Weapon>();
+        secondaryWeapon = transform.Find("SecondaryWeapon").GetComponent<Weapon>();
+
         IdleState = new PlayerIdleState(this, StateMachine, "idle", playerData);
         MoveState = new PlayerMoveState(this, StateMachine, "move", playerData);
         JumpState = new PlayerJumpState(this, StateMachine, "inAir", playerData); //inAir as animBoolName to share same blend tree with InAirState
@@ -56,8 +63,8 @@ public class Player : Entity
         DashState = new PlayerDashState(this, StateMachine, "inAir", playerData);
         CrouchIdleState = new PlayerCrouchIdleState(this, StateMachine, "crouchIdle", playerData);
         CrouchMoveState = new PlayerCrouchMoveState(this, StateMachine, "crouchMove", playerData);
-        PrimaryAttackState = new PlayerAttackState(this, StateMachine, "attack", playerData);
-        SecondaryAttackState = new PlayerAttackState(this, StateMachine, "attack", playerData);
+        PrimaryAttackState = new PlayerAttackState(this, StateMachine, "attack", playerData, primaryWeapon);
+        SecondaryAttackState = new PlayerAttackState(this, StateMachine, "attack", playerData, secondaryWeapon);
     }
 
     protected override void Start()
