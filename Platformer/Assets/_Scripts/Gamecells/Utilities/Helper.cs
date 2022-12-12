@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Utilities
+namespace Gamecells.Utilities
 {
     public static class Helper
     {
+        #region WaitForSecondsDictionary
+        
         private static readonly Dictionary<float, WaitForSeconds> WaitDictionary = new Dictionary<float, WaitForSeconds>();
 
         /// <summary>
@@ -18,5 +20,8 @@ namespace Utilities
             WaitDictionary[time] = new WaitForSeconds(time);
             return WaitDictionary[time];
         }
+        
+
+        #endregion
     }
 }

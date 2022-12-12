@@ -12266,6 +12266,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 320009461}
     m_Modifications:
+    - target: {fileID: 508320554, guid: c77c8c84b0cd2974281372c641f1cb04, type: 3}
+      propertyPath: numberOfAttacks
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 508320554, guid: c77c8c84b0cd2974281372c641f1cb04, type: 3}
+      propertyPath: attackCounterResetCooldown
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7576248875353926312, guid: c77c8c84b0cd2974281372c641f1cb04, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -71730,6 +71738,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 320009461}
     m_Modifications:
+    - target: {fileID: 508320554, guid: c77c8c84b0cd2974281372c641f1cb04, type: 3}
+      propertyPath: numberOfAttacks
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 508320554, guid: c77c8c84b0cd2974281372c641f1cb04, type: 3}
+      propertyPath: attackCounterResetCooldown
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2484546211846264449, guid: c77c8c84b0cd2974281372c641f1cb04, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7576248875353926312, guid: c77c8c84b0cd2974281372c641f1cb04, type: 3}
       propertyPath: m_RootOrder
       value: 2

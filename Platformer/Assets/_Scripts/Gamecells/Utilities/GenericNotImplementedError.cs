@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Utilities
+namespace Gamecells.Utilities
 {
     public static class GenericNotImplementedError
     {

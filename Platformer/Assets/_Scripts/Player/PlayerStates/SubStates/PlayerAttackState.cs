@@ -1,7 +1,6 @@
-using Gamecells.Weapons;
 using System.Collections;
 using System.Collections.Generic;
-
+using Gamecells.Weapons;
 using UnityEngine;
 
 public class PlayerAttackState : PlayerAbilityState
@@ -19,6 +18,7 @@ public class PlayerAttackState : PlayerAbilityState
         : base(entity, stateMachine, animBoolName, playerData)
     {
         this.weapon = weapon;
+        weapon.OnExit += ExitHandler;
     }
 
     public override void Enter()
@@ -26,5 +26,11 @@ public class PlayerAttackState : PlayerAbilityState
         base.Enter();
 
         weapon.Enter();
+    }
+
+    private void ExitHandler()
+    {
+        AnimationFinishTrigger();
+        isAbilityDone = true;
     }
 }
