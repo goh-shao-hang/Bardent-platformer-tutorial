@@ -6,17 +6,22 @@ namespace Gamecells.Weapons
 {
     public class Weapon : MonoBehaviour
     {
+        //References
+        [field: SerializeField] public WeaponDataSO Data { get; private set; }
+        public GameObject BaseGameObject { get; private set; }
+        public GameObject WeaponSpriteGameObject { get; private set; }
+
         private Animator anim;
-        private GameObject baseGO;
         private AnimationEventHandler eventHandler;
         private Timer attackCounterResetTimer;
 
+        //Fields
+        public event Action OnEnter;
         public event Action OnExit;
         
         private static readonly int activeHash = Animator.StringToHash("active");
         private static readonly int counterHash = Animator.StringToHash("counter");
 
-        [SerializeField] private int numberOfAttacks = 3;
         [SerializeField] private float attackCounterResetCooldown = 2f;
         
         private int currentAttackCounter;
@@ -24,14 +29,15 @@ namespace Gamecells.Weapons
         public int CurrentAttackCounter
         {
             get => currentAttackCounter;
-            private set => currentAttackCounter = value >= numberOfAttacks ? 0 : value;
+            private set => currentAttackCounter = value >= Data.NumberOfAttacks ? 0 : value;
         }
 
         private void Awake()
         {
-            baseGO = transform.GetChild(0).gameObject;
-            anim = baseGO.GetComponent<Animator>();
-            eventHandler = baseGO.GetComponent<AnimationEventHandler>();
+            BaseGameObject = transform.GetChild(0).gameObject;
+            WeaponSpriteGameObject = transform.GetChild(1).gameObject;
+            anim = BaseGameObject.GetComponent<Animator>();
+            eventHandler = BaseGameObject.GetComponent<AnimationEventHandler>();
             attackCounterResetTimer = new Timer(attackCounterResetCooldown);
         }
 
@@ -46,14 +52,19 @@ namespace Gamecells.Weapons
 
             anim.SetBool(activeHash, true);
             anim.SetInteger(counterHash, CurrentAttackCounter);
+
             attackCounterResetTimer.StopTimer();
+
+            OnEnter?.Invoke();
         }
 
         private void Exit()
         {
             anim.SetBool(activeHash, false);
             CurrentAttackCounter++;
+
             attackCounterResetTimer.StartTimer();
+
             OnExit?.Invoke();
         }
 
