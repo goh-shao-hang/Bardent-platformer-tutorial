@@ -1,36 +1,37 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Stats : CoreComponent
+namespace Gamecells.CoreSystem
 {
-    public event Action OnHealthZero; 
-
-    [SerializeField] private float maxHealth = 100f;
-
-    private float currentHealth;
-
-    protected override void Awake()
+    public class Stats : CoreComponent
     {
-        base.Awake();
+        public event Action OnHealthZero;
 
-        currentHealth = maxHealth;
-    }
+        [SerializeField] private float maxHealth = 100f;
 
-    public void DecreaseHealth(float amount)
-    {
-        currentHealth -= amount;
+        private float currentHealth;
 
-        if (currentHealth <= 0f)
+        protected override void Awake()
         {
-            currentHealth = 0;
-            OnHealthZero?.Invoke();
-        }
-    }
+            base.Awake();
 
-    public void IncreaseHealth(float amount)
-    {
-        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+            currentHealth = maxHealth;
+        }
+
+        public void DecreaseHealth(float amount)
+        {
+            currentHealth -= amount;
+
+            if (currentHealth <= 0f)
+            {
+                currentHealth = 0;
+                OnHealthZero?.Invoke();
+            }
+        }
+
+        public void IncreaseHealth(float amount)
+        {
+            currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        }
     }
 }

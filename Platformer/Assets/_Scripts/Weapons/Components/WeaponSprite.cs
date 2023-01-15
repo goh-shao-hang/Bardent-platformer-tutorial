@@ -1,4 +1,4 @@
-using Gamecells.Weapons.Components.ComponentData;
+using Gamecells.Weapons.Components;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,9 +6,8 @@ using UnityEngine;
 
 namespace Gamecells.Weapons.Components
 {
-    public class WeaponSprite : WeaponComponent
+    public class WeaponSprite : WeaponComponent<WeaponSpriteData, AttackSprites>
     {
-        private WeaponSpriteData data;
         private SpriteRenderer baseSpriteRenderer;
         private SpriteRenderer weaponSpriteRenderer;
 
@@ -29,8 +28,7 @@ namespace Gamecells.Weapons.Components
                 return;
             }
 
-
-            Sprite[] currentAttackSprites = data.AttackData[weapon.CurrentAttackCounter].Sprites;
+            Sprite[] currentAttackSprites = currentAttackData.Sprites;
 
             if (currentWeaponSpriteIndex >= currentAttackSprites.Length)
             {
@@ -48,7 +46,6 @@ namespace Gamecells.Weapons.Components
 
             baseSpriteRenderer = transform.Find("Base").GetComponent<SpriteRenderer>();
             weaponSpriteRenderer = transform.Find("WeaponSprite").GetComponent<SpriteRenderer>();
-            data = weapon.Data.GetData<WeaponSpriteData>();
 
             //TODO: fix this when we create weapon data
             //baseSpriteRenderer = weapon.BaseGameObject.GetComponent<SpriteRenderer>();

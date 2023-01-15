@@ -50,6 +50,9 @@ public class Player : Entity
         primaryWeapon = transform.Find("PrimaryWeapon").GetComponent<Weapon>();
         secondaryWeapon = transform.Find("SecondaryWeapon").GetComponent<Weapon>();
 
+        primaryWeapon.SetCore(Core);
+        secondaryWeapon.SetCore(Core);
+
         IdleState = new PlayerIdleState(this, StateMachine, "idle", playerData);
         MoveState = new PlayerMoveState(this, StateMachine, "move", playerData);
         JumpState = new PlayerJumpState(this, StateMachine, "inAir", playerData); //inAir as animBoolName to share same blend tree with InAirState

@@ -15,11 +15,17 @@ MonoBehaviour:
   <NumberOfAttacks>k__BackingField: 3
   <ComponentData>k__BackingField:
   - rid: 9210905042622087169
+  - rid: 9210905067731025920
+  - rid: 685501866949476353
   references:
     version: 2
     RefIds:
+    - rid: 685501866949476353
+      type: {class: ActionHitboxData, ns: Gamecells, asm: Assembly-CSharp}
+      data:
+        <AttackData>k__BackingField: []
     - rid: 9210905042622087169
-      type: {class: WeaponSpriteData, ns: Gamecells.Weapons.Components.ComponentData, asm: Assembly-CSharp}
+      type: {class: WeaponSpriteData, ns: Gamecells.Weapons.Components, asm: Assembly-CSharp}
       data:
         <AttackData>k__BackingField:
         - <Sprites>k__BackingField:
@@ -40,3 +46,13 @@ MonoBehaviour:
           - {fileID: -488746552, guid: cf6476bc17b646e459b803d084f62c7f, type: 3}
           - {fileID: 2016359601, guid: cf6476bc17b646e459b803d084f62c7f, type: 3}
           - {fileID: 478873150, guid: cf6476bc17b646e459b803d084f62c7f, type: 3}
+    - rid: 9210905067731025920
+      type: {class: MovementData, ns: Gamecells.Weapons.Components, asm: Assembly-CSharp}
+      data:
+        <AttackData>k__BackingField:
+        - <Direction>k__BackingField: {x: 1, y: 0}
+          <Velocity>k__BackingField: 3
+        - <Direction>k__BackingField: {x: 1, y: 0}
+          <Velocity>k__BackingField: 4
+        - <Direction>k__BackingField: {x: 1, y: 5}
+          <Velocity>k__BackingField: 5

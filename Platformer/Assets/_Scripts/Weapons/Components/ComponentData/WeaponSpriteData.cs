@@ -1,10 +1,10 @@
-using Gamecells.Weapons.Components.ComponentData.AttackData;
+using Gamecells.Weapons.Components;
 using UnityEngine;
 
-namespace Gamecells.Weapons.Components.ComponentData
+namespace Gamecells.Weapons.Components
 {
-    public class WeaponSpriteData : ComponentData
+    public class WeaponSpriteData : ComponentData<AttackSprites>
     {
-        [field: SerializeField] public AttackSprites[] AttackData { get; private set; }
+
     }
 }

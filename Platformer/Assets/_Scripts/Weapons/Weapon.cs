@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Gamecells.Utilities;
+using Gamecells.CoreSystem;
 
 namespace Gamecells.Weapons
 {
@@ -10,9 +11,10 @@ namespace Gamecells.Weapons
         [field: SerializeField] public WeaponDataSO Data { get; private set; }
         public GameObject BaseGameObject { get; private set; }
         public GameObject WeaponSpriteGameObject { get; private set; }
+        public AnimationEventHandler EventHandler { get; private set; }
+        public Core Core { get; private set; }
 
         private Animator anim;
-        private AnimationEventHandler eventHandler;
         private Timer attackCounterResetTimer;
 
         //Fields
@@ -37,13 +39,18 @@ namespace Gamecells.Weapons
             BaseGameObject = transform.GetChild(0).gameObject;
             WeaponSpriteGameObject = transform.GetChild(1).gameObject;
             anim = BaseGameObject.GetComponent<Animator>();
-            eventHandler = BaseGameObject.GetComponent<AnimationEventHandler>();
+            EventHandler = BaseGameObject.GetComponent<AnimationEventHandler>();
             attackCounterResetTimer = new Timer(attackCounterResetCooldown);
         }
 
         private void Update()
         {
             attackCounterResetTimer.Tick();
+        }
+
+        public void SetCore(Core core)
+        {
+            Core = core;
         }
 
         public void Enter()
@@ -70,13 +77,13 @@ namespace Gamecells.Weapons
 
         private void OnEnable()
         {
-            eventHandler.OnFinish += Exit;
+            EventHandler.OnFinish += Exit;
             attackCounterResetTimer.OnTimerDone += ResetAttackCounter;
         }
 
         private void OnDisable()
         {
-            eventHandler.OnFinish -= Exit;
+            EventHandler.OnFinish -= Exit;
             attackCounterResetTimer.OnTimerDone -= ResetAttackCounter;
         }
 
