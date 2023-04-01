@@ -17,6 +17,9 @@ namespace Gamecells.Weapons
 
         private WeaponDataSO dataSO;
 
+        private bool showForceUpdateButtons;
+        private bool showAddComponentButtons;
+
         private void OnEnable()
         {
             dataSO = (WeaponDataSO)target; //target is the object being inspected.
@@ -26,15 +29,52 @@ namespace Gamecells.Weapons
         {
             base.OnInspectorGUI();
 
-            foreach (Type dataComponentType in dataComponentTypes)
+            if (GUILayout.Button("Set Number Of Attacks"))
             {
-                if (GUILayout.Button(dataComponentType.Name))
+                foreach (ComponentData item in dataSO.ComponentData)
                 {
-                    var comp = Activator.CreateInstance(dataComponentType) as ComponentData; //Extract information from a specific type and create an instance(Object) out of it.
-                    if (comp == null) return;
-                    dataSO.AddData(comp);
+                    item.InitializeAttackData(dataSO.NumberOfAttacks);
                 }
             }
+
+            showAddComponentButtons = EditorGUILayout.Foldout(showAddComponentButtons, "Add Components");
+
+            if (showAddComponentButtons)
+            {
+                foreach (Type dataComponentType in dataComponentTypes)
+                {
+                    if (GUILayout.Button(dataComponentType.Name))
+                    {
+                        var comp = Activator.CreateInstance(dataComponentType) as ComponentData; //Extract information from a specific type and create an instance(Object) out of it.
+                        if (comp == null) return;
+
+                        comp.InitializeAttackData(dataSO.NumberOfAttacks);
+                        dataSO.AddData(comp);
+                    }
+                }
+            }
+
+            showForceUpdateButtons = EditorGUILayout.Foldout(showForceUpdateButtons, "Force Update Buttons");
+
+            if (showForceUpdateButtons)
+            {
+                if (GUILayout.Button("Force Update Component Names"))
+                {
+                    foreach (ComponentData item in dataSO.ComponentData)
+                    {
+                        item.SetComponentName();
+                    }
+                }
+
+                if (GUILayout.Button("Force Update Attack Names"))
+                {
+                    foreach (ComponentData item in dataSO.ComponentData)
+                    {
+                        item.SetAttackDataNames();
+                    }
+                }
+            }
+
         }
 
         [DidReloadScripts] //Calls method marked with this attribute when scripts are recompiled. The function called must be static.

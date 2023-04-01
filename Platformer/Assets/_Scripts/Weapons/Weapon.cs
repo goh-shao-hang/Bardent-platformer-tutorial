@@ -8,7 +8,7 @@ namespace Gamecells.Weapons
     public class Weapon : MonoBehaviour
     {
         //References
-        [field: SerializeField] public WeaponDataSO Data { get; private set; }
+        public WeaponDataSO WeaponData { get; private set; }
         public GameObject BaseGameObject { get; private set; }
         public GameObject WeaponSpriteGameObject { get; private set; }
         public AnimationEventHandler EventHandler { get; private set; }
@@ -31,7 +31,7 @@ namespace Gamecells.Weapons
         public int CurrentAttackCounter
         {
             get => currentAttackCounter;
-            private set => currentAttackCounter = value >= Data.NumberOfAttacks ? 0 : value;
+            private set => currentAttackCounter = value >= WeaponData.NumberOfAttacks ? 0 : value;
         }
 
         private void Awake()
@@ -45,12 +45,17 @@ namespace Gamecells.Weapons
 
         private void Update()
         {
-            attackCounterResetTimer.Tick();
+            this.attackCounterResetTimer.Tick();
         }
 
         public void SetCore(Core core)
         {
-            Core = core;
+            this.Core = core;
+        }
+
+        public void SetWeaponData(WeaponDataSO weaponData)
+        {
+            this.WeaponData = weaponData;
         }
 
         public void Enter()

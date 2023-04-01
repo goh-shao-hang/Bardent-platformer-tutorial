@@ -40,28 +40,19 @@ namespace Gamecells.Weapons.Components
             currentWeaponSpriteIndex++;
         }
 
-        protected override void Awake()
+        protected override void Start()
         {
-            base.Awake();
+            base.Start();
 
-            baseSpriteRenderer = transform.Find("Base").GetComponent<SpriteRenderer>();
-            weaponSpriteRenderer = transform.Find("WeaponSprite").GetComponent<SpriteRenderer>();
-
-            //TODO: fix this when we create weapon data
-            //baseSpriteRenderer = weapon.BaseGameObject.GetComponent<SpriteRenderer>();
-            //weaponSpriteRenderer = weapon.WeaponSpriteGameObject.GetComponent<SpriteRenderer>();
-        }
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
+            baseSpriteRenderer = weapon.BaseGameObject.GetComponent<SpriteRenderer>();
+            weaponSpriteRenderer = weapon.WeaponSpriteGameObject.GetComponent<SpriteRenderer>();
 
             baseSpriteRenderer.RegisterSpriteChangeCallback(HandleBaseSpriteChange);
         }
 
-        protected override void OnDisable()
+        protected override void OnDestroy()
         {
-            base.OnDisable();
+            base.OnDestroy();
 
             baseSpriteRenderer.UnregisterSpriteChangeCallback(HandleBaseSpriteChange);
         }

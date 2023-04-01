@@ -7,6 +7,9 @@ namespace Gamecells.Weapons.Components
 {
     public class MovementData : ComponentData<AttackMovement>
     {
-
+        protected override void SetComponentDependency()
+        {
+            this.ComponentDependency = typeof(Movement);
+        }
     }
 }

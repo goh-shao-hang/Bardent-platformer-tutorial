@@ -6,7 +6,7 @@ namespace Gamecells.Weapons.Components
 {
     public class ActionHitbox : WeaponComponent<ActionHitboxData, AttackActionHitbox>
     {
-        private event Action<Collider2D[]> OnDetectedCollider2D;
+        public event Action<Collider2D[]> OnDetectedCollider2D;
 
         private CoreComp<CoreSystem.Movement> movement;
         private Vector2 offset;
@@ -17,6 +17,7 @@ namespace Gamecells.Weapons.Components
             base.Start();
 
             movement = new CoreComp<CoreSystem.Movement>(Core);
+            animationEventHandler.OnAttackAction += HandleAttackAction;
         }
 
         private void HandleAttackAction()
@@ -31,25 +32,13 @@ namespace Gamecells.Weapons.Components
             {
                 OnDetectedCollider2D?.Invoke(detectedColliders);
             }
-
-            foreach (var item in detectedColliders)
-            {
-                print(item.name);
-            }
         }
 
-        protected override void OnEnable()
+        protected override void OnDestroy()
         {
-            base.OnEnable();
+            base.OnDestroy();
 
-            eventHandler.OnAttackAction += HandleAttackAction;
-        }
-
-        protected override void OnDisable()
-        {
-            base.OnDisable();
-
-            eventHandler.OnAttackAction -= HandleAttackAction;
+            animationEventHandler.OnAttackAction -= HandleAttackAction;
         }
 
         private void OnDrawGizmosSelected()

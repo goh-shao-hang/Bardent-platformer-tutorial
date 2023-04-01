@@ -6,23 +6,30 @@ namespace Gamecells.Weapons.Components
     public abstract class WeaponComponent : MonoBehaviour
     {
         protected Weapon weapon;
-        protected AnimationEventHandler eventHandler;
+        protected AnimationEventHandler animationEventHandler;
         //TODO: Fix this when finishing weapon data
         //protected AnimationEventHandler EventHandler => weapon.EventHandler;
         protected Core Core => weapon.Core;
 
         protected bool isAttackActive;
 
+        public virtual void Init()
+        {
+
+        }
+
         protected virtual void Awake()
         {
             weapon = GetComponent<Weapon>();
-
-            eventHandler = GetComponentInChildren<AnimationEventHandler>();
+            animationEventHandler = GetComponentInChildren<AnimationEventHandler>();
         }
 
         protected virtual void Start()
         {
-            
+            //Subscribing in Start instead of OnEnable because OnEnable is called before Start, but WeaponGenerator currently initializes weapon on Start
+            //Thus, subscribing in OnEnable can cause sequencing issues
+            weapon.OnEnter += HandleEnter;
+            weapon.OnExit += HandleExit;
         }
 
         protected virtual void HandleEnter()
@@ -35,13 +42,7 @@ namespace Gamecells.Weapons.Components
             isAttackActive = false;
         }
 
-        protected virtual void OnEnable()
-        {
-            weapon.OnEnter += HandleEnter;
-            weapon.OnExit += HandleExit;
-        }
-
-        protected virtual void OnDisable()
+        protected virtual void OnDestroy()
         {
             weapon.OnEnter -= HandleEnter;
             weapon.OnExit -= HandleExit;
@@ -53,11 +54,11 @@ namespace Gamecells.Weapons.Components
         protected T1 componentData;
         protected T2 currentAttackData;
 
-        protected override void Awake()
+        public override void Init()
         {
-            base.Awake();
+            base.Init();
 
-            componentData = weapon.Data.GetData<T1>();
+            componentData = weapon.WeaponData.GetData<T1>();
         }
 
         protected override void HandleEnter()

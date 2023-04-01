@@ -24,6 +24,11 @@ namespace Gamecells.CoreSystem
             base.LogicUpdate();
 
             CurrentVelocity = RB.velocity;
+
+            if (transform.parent.parent.name == "Enemy1")
+            {
+                Debug.Log(CurrentVelocity);
+            }
         }
 
         public void SetVelocityZero()
@@ -64,6 +69,10 @@ namespace Gamecells.CoreSystem
 
             RB.velocity = vector2Workspace;
             CurrentVelocity = vector2Workspace;
+            if (CurrentVelocity == new Vector2(0, 6.29f))
+            {
+                //stop
+            }
         }
 
         public void AllowSetVelocity(bool value)

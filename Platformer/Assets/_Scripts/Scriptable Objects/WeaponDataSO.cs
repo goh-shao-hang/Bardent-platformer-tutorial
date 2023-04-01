@@ -1,4 +1,5 @@
 using Gamecells.Weapons.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,6 +12,11 @@ namespace Gamecells.Weapons
         [field: SerializeField] public int NumberOfAttacks { get; private set; } = 3;
 
         [field: SerializeReference] public List<ComponentData> ComponentData { get; private set; }
+
+        public List<Type> GetAllDependencies()
+        {
+            return ComponentData.Select(componentData => componentData.ComponentDependency).ToList(); //Retrieve all componentDependency from each componentData
+        }
 
         public T GetData<T>()
         {
