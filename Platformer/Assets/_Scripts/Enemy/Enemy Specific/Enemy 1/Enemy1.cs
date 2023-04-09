@@ -40,11 +40,26 @@ public class Enemy1 : Enemy
         deadState = new E1_DeadState(this, StateMachine, "dead", deadStateData);
     }
 
+    private void OnEnable()
+    {
+        stats.Poise.OnCurrentValueZero += HandlePoiseZero;
+    }
+
+    private void OnDisable()
+    {
+        stats.Poise.OnCurrentValueZero -= HandlePoiseZero;
+    }
+
     protected override void Start()
     {
         base.Start();
 
         StateMachine.Inititalize(moveState);
+    }
+
+    private void HandlePoiseZero()
+    {
+        StateMachine.ChangeState(stunState);
     }
 
     public override void OnDrawGizmos()

@@ -9,8 +9,9 @@ public class Entity : MonoBehaviour
 
     public Core Core;
     public FiniteStateMachine StateMachine;
-
+    protected Stats stats;
     public Animator anim { get; protected set; }
+
     #endregion
 
     #region Unity Callback Functions
@@ -18,6 +19,7 @@ public class Entity : MonoBehaviour
     {
         Core = GetComponentInChildren<Core>();
         StateMachine = new FiniteStateMachine();
+        stats = Core.GetCoreComponent<Stats>();
 
         anim = GetComponent<Animator>();
     }

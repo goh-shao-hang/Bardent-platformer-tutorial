@@ -22,8 +22,8 @@ namespace Gamecells.CoreSystem
             core.transform.parent.gameObject.SetActive(false);
         }
 
-        private void OnEnable() => Stats.OnHealthZero += Die;
+        private void OnEnable() => Stats.Health.OnCurrentValueZero += Die;
 
-        private void OnDisable() => Stats.OnHealthZero -= Die;
+        private void OnDisable() => Stats.Health.OnCurrentValueZero -= Die;
     }
 }

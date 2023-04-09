@@ -248,7 +248,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c2e8b3e596a6844f9a5813b826ac52e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 50
+  <Health>k__BackingField:
+    <MaxValue>k__BackingField: 50
+  <Poise>k__BackingField:
+    <MaxValue>k__BackingField: 25
+  _poiseRecoveryRate: 5
 --- !u!1 &169571617
 GameObject:
   m_ObjectHideFlags: 0
@@ -357,7 +361,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c2e8b3e596a6844f9a5813b826ac52e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  <Health>k__BackingField:
+    <MaxValue>k__BackingField: 10
+  <Poise>k__BackingField:
+    <MaxValue>k__BackingField: 100
+  _poiseRecoveryRate: 25
 --- !u!1 &259263771
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,6 +464,7 @@ GameObject:
   - component: {fileID: 314373843}
   - component: {fileID: 314373846}
   - component: {fileID: 314373844}
+  - component: {fileID: 314373847}
   - component: {fileID: 314373845}
   m_Layer: 7
   m_Name: Combat
@@ -532,6 +541,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageParticles: {fileID: 5156702832231683691, guid: e910fe97282c0ee43a6352101e7bda18, type: 3}
   cameraShakeIntensity: 0.15
+--- !u!114 &314373847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314373842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 670e25d8990940f499757db385b91379, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &320009458
 GameObject:
   m_ObjectHideFlags: 0
@@ -11882,7 +11903,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c2e8b3e596a6844f9a5813b826ac52e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 50
+  <Health>k__BackingField:
+    <MaxValue>k__BackingField: 50
+  <Poise>k__BackingField:
+    <MaxValue>k__BackingField: 25
+  _poiseRecoveryRate: 5
 --- !u!1 &782656221
 GameObject:
   m_ObjectHideFlags: 0
@@ -71672,6 +71697,7 @@ GameObject:
   - component: {fileID: 1850490347}
   - component: {fileID: 1850490350}
   - component: {fileID: 1850490349}
+  - component: {fileID: 1850490351}
   - component: {fileID: 1850490348}
   m_Layer: 7
   m_Name: Combat
@@ -71748,6 +71774,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageParticles: {fileID: 5156702832231683691, guid: e910fe97282c0ee43a6352101e7bda18, type: 3}
   cameraShakeIntensity: 0.15
+--- !u!114 &1850490351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1850490346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 670e25d8990940f499757db385b91379, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1890676985
 GameObject:
   m_ObjectHideFlags: 0

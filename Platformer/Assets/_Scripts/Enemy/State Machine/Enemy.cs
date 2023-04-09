@@ -22,11 +22,11 @@ public class Enemy : Entity
     
     public int lastDamageDirection { get; private set; }
 
+
     private float currentHealth;
     private float currentStunResistance;
     private float lastDamageTime;
     
-
     protected bool isStunned;
     protected bool isDead;
 

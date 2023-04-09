@@ -9,14 +9,14 @@ namespace Gamecells.CoreSystem
         [SerializeField] private GameObject damageParticles;
         [SerializeField] private float cameraShakeIntensity = 0.15f;
 
-        private CoreComp<Stats> stats;
-        private CoreComp<ParticleManager> particleManager;
+        private Stats stats;
+        private ParticleManager particleManager;
 
         public void TakeDamage(float amount)
         {
             Debug.Log($"{core.transform.parent.name} damaged!");
-            stats.Comp?.DecreaseHealth(amount);
-            particleManager.Comp?.StartParticles(damageParticles);
+            stats.Health.Decrease(amount);
+            particleManager.StartParticles(damageParticles);
             CameraManager.CameraShake(cameraShakeIntensity);
         }
 
@@ -24,8 +24,8 @@ namespace Gamecells.CoreSystem
         {
             base.Awake();
 
-            stats = new CoreComp<Stats>(core);
-            particleManager = new CoreComp<ParticleManager>(core);
+            stats = core.GetCoreComponent<Stats>();
+            particleManager = core.GetCoreComponent<ParticleManager>();
         }
     }
 }

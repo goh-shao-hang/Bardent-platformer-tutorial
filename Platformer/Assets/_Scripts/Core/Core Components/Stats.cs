@@ -5,33 +5,23 @@ namespace Gamecells.CoreSystem
 {
     public class Stats : CoreComponent
     {
-        public event Action OnHealthZero;
-
-        [SerializeField] private float maxHealth = 100f;
-
-        private float currentHealth;
+        [field: SerializeField] public Stat Health { get; private set; }
+        [field: SerializeField] public Stat Poise { get; private set; }
+        [SerializeField] private float _poiseRecoveryRate;
 
         protected override void Awake()
         {
             base.Awake();
 
-            currentHealth = maxHealth;
+            Health.Init();
+            Poise.Init();
         }
 
-        public void DecreaseHealth(float amount)
+        private void Update()
         {
-            currentHealth -= amount;
+            if (Poise.CurrentValue.Equals(Poise.MaxValue)) return;
 
-            if (currentHealth <= 0f)
-            {
-                currentHealth = 0;
-                OnHealthZero?.Invoke();
-            }
-        }
-
-        public void IncreaseHealth(float amount)
-        {
-            currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+            Poise.Increase(_poiseRecoveryRate * Time.deltaTime);
         }
     }
 }

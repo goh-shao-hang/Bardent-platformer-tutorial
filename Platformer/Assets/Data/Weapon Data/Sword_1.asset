@@ -19,6 +19,7 @@ MonoBehaviour:
   - rid: 685502114695217152
   - rid: 685502143862145024
   - rid: 7490416396818710529
+  - rid: 7490416584791687168
   references:
     version: 2
     RefIds:
@@ -79,6 +80,17 @@ MonoBehaviour:
         - name: Attack 3
           <Angle>k__BackingField: {x: 1, y: 3}
           <Strength>k__BackingField: 20
+    - rid: 7490416584791687168
+      type: {class: PoiseDamageData, ns: Gamecells.Weapons.Components, asm: Assembly-CSharp}
+      data:
+        name: PoiseDamageData
+        attackData:
+        - name: Attack 1
+          <Amount>k__BackingField: 30
+        - name: Attack 2
+          <Amount>k__BackingField: 30
+        - name: Attack 3
+          <Amount>k__BackingField: 30
     - rid: 9210905042622087169
       type: {class: WeaponSpriteData, ns: Gamecells.Weapons.Components, asm: Assembly-CSharp}
       data:
